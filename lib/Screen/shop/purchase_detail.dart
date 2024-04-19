@@ -78,7 +78,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * .5,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.grey[300],
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
@@ -163,9 +163,31 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                           ),
                           child: const Text(
                             // Ambil Dari Firebase
-                            "Deskripsi Obat",
+                            "Kategori Obat",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          left: 15,
+                          right: 15,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
+                          child: const Text(
+                            // Ambil Dari Firebase
+                            "Deskripsi Obat",
+                            style: TextStyle(
+                              color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -283,7 +305,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                               ),
                             ),
                             Material(
-                              color: Colors.orangeAccent,
+                              color: Colors.purpleAccent,
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () =>
@@ -303,13 +325,18 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: const Text(
-                                    "Tambah Ke Keranjang",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  child: const Row(
+                                    children: [
+                                      Icon(Icons.shopping_cart_rounded),
+                                      Text(
+                                        "Tambah Ke Keranjang",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

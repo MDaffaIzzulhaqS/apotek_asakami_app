@@ -1,5 +1,7 @@
+import 'package:apotek_asakami_app/Screen/shop/payment.dart';
 import 'package:apotek_asakami_app/Widget/grid_items.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Purchase extends StatefulWidget {
   const Purchase({super.key});
@@ -42,6 +44,18 @@ class _PurchaseState extends State<Purchase> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            FloatingActionButton(
+              onPressed: () {
+                PersistentNavBarNavigator.pushNewScreen(context,
+                    screen: const Payment(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
+              },
+              child: const Icon(Icons.shopping_cart_rounded),
+            ),
+            SizedBox(
+              width: 15,
+            ),
             FloatingActionButton(
               onPressed: () {},
               child: const Icon(Icons.search_rounded),
