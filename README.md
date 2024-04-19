@@ -1,6 +1,6 @@
 # apotek_asakami_app
 
-A new Flutter project.
+Project Skripsi Apotek Asakami Dengan Framework Flutter Berbasis Android
 
 ## Getting Started
 
