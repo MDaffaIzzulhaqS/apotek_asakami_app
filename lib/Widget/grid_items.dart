@@ -38,7 +38,13 @@ class _GridItemsState extends State<GridItems> {
                 child: Card(
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
-                    title: Text(documentSnapshot['name']),
+                    title: Text(
+                      documentSnapshot['name'],
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
@@ -56,6 +62,16 @@ class _GridItemsState extends State<GridItems> {
                             ),
                             Text(
                               documentSnapshot['category'].toString(),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Deskripsi Barang : ",
+                            ),
+                            Text(
+                              documentSnapshot['description'].toString(),
                             ),
                           ],
                         ),

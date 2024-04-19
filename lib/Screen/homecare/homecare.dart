@@ -10,6 +10,10 @@ class HomeCare extends StatefulWidget {
 class _HomeCareState extends State<HomeCare> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: Text('Halaman HomeCare'),
+      ),
+    );
   }
 }

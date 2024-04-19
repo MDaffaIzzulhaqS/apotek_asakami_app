@@ -10,6 +10,10 @@ class Consultation extends StatefulWidget {
 class _ConsultationState extends State<Consultation> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: Text('Halaman Konsultasi'),
+      ),
+    );
   }
 }

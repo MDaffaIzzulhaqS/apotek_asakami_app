@@ -82,8 +82,11 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
               ),
             )
-          : SizedBox(
-              height: 80,
+          : Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              height: 70,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

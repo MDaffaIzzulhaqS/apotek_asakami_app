@@ -13,6 +13,7 @@ class AdminPageState extends State<AdminPage> {
   var filter = "";
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final CollectionReference _productss =
@@ -68,6 +69,7 @@ class AdminPageState extends State<AdminPage> {
       action = 'update';
       _nameController.text = documentSnapshot['name'];
       _categoryController.text = documentSnapshot['category'];
+      _descriptionController.text = documentSnapshot['description'];
       _quantityController.text = documentSnapshot['quantity'];
       _priceController.text = documentSnapshot['price'].toString();
     }
@@ -89,22 +91,26 @@ class AdminPageState extends State<AdminPage> {
             children: [
               TextField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'name'),
+                decoration: const InputDecoration(labelText: 'Nama'),
               ),
               TextField(
                 controller: _categoryController,
-                decoration: const InputDecoration(labelText: 'category'),
+                decoration: const InputDecoration(labelText: 'Kategori'),
+              ),
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(labelText: 'Deskripsi'),
               ),
               TextField(
                 controller: _quantityController,
-                decoration: const InputDecoration(labelText: 'quantity'),
+                decoration: const InputDecoration(labelText: 'Jumlah'),
               ),
               TextField(
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 controller: _priceController,
                 decoration: const InputDecoration(
-                  labelText: 'price',
+                  labelText: 'Harga',
                 ),
               ),
               const SizedBox(
@@ -115,6 +121,7 @@ class AdminPageState extends State<AdminPage> {
                 onPressed: () async {
                   final String name = _nameController.text;
                   final String category = _categoryController.text;
+                  final String description = _descriptionController.text;
                   final String quantity = _quantityController.text;
                   final double? price = double.tryParse(_priceController.text);
                   if (price != null) {
@@ -123,6 +130,7 @@ class AdminPageState extends State<AdminPage> {
                       await _productss.add({
                         "name": name,
                         "category": category,
+                        "description": description,
                         "quantity": quantity,
                         "price": price,
                       });
@@ -132,6 +140,7 @@ class AdminPageState extends State<AdminPage> {
                       await _productss.doc(documentSnapshot!.id).update({
                         "name": name,
                         "category": category,
+                        "description": description,
                         "quantity": quantity,
                         "price": price,
                       });
@@ -139,6 +148,7 @@ class AdminPageState extends State<AdminPage> {
                     // Clear the text fields
                     _nameController.text = '';
                     _categoryController.text = '';
+                    _descriptionController.text = '';
                     _quantityController.text = '';
                     _priceController.text = '';
                     // Hide the bottom sheet
@@ -276,6 +286,9 @@ class AdminPageState extends State<AdminPage> {
                           children: [
                             Text(
                               documentSnapshot['category'].toString(),
+                            ),
+                            Text(
+                              documentSnapshot['description'].toString(),
                             ),
                             Text(
                               documentSnapshot['quantity'].toString(),

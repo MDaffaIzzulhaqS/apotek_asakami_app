@@ -21,6 +21,20 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
   // final CollectionReference _productss =
   //     FirebaseFirestore.instance.collection('products');
 
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,8 +213,10 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Material(
-                              child: InkWell(
-                                onTap: () {},
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  _decrementCounter();
+                                },
                                 child: Container(
                                   width: 50,
                                   height: 50,
@@ -220,23 +236,29 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               width: 50,
                               height: 50,
                               child: Center(
-                                child: Text(
-                                  // Angka Bersifat Dinamis Sesuai Jumlah Barang Yang Dibeli
-                                  "1",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                child: AnimatedOpacity(
+                                  opacity: _counter != 0 ? 1 : 0,
+                                  duration: const Duration(milliseconds: 500),
+                                  child: Text(
+                                    '$_counter',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             Material(
-                              child: InkWell(
-                                onTap: () {},
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  _incrementCounter();
+                                },
                                 child: Container(
                                   width: 50,
                                   height: 50,
