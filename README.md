@@ -1,4 +1,4 @@
-# apotek_asakami_app
+# Apotek Asakami App
 
 Project Skripsi Apotek Asakami Dengan Framework Flutter Berbasis Android
 
