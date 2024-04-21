@@ -46,10 +46,12 @@ class _PurchaseState extends State<Purchase> {
           children: [
             FloatingActionButton(
               onPressed: () {
-                PersistentNavBarNavigator.pushNewScreen(context,
-                    screen: const Checkout(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const Checkout(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
               },
               child: const Icon(Icons.shopping_cart_rounded),
             ),

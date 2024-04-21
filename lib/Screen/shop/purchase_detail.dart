@@ -1,5 +1,4 @@
 import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
-import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -38,6 +37,19 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Detail Pembelian",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
       body: Center(
         child: Expanded(
           child: Stack(
@@ -50,39 +62,6 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     // Ambil Dari Firebase
                     image: AssetImage('assets/images/logo_asakami.png'),
                     fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 20,
-                left: 10 + MediaQuery.of(context).padding.top,
-                child: InkWell(
-                  onTap: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const Purchase(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  ),
-                  child: ClipOval(
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.15),
-                            offset: const Offset(0, 4),
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),
