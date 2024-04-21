@@ -1,4 +1,4 @@
-import 'package:apotek_asakami_app/Screen/shop/payment.dart';
+import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
 import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
 
   void _decrementCounter() {
     setState(() {
-      _counter--;
+      _counter <= 0 ? _counter = 0 : _counter--;
     });
   }
 
@@ -333,7 +333,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                 onTap: () =>
                                     PersistentNavBarNavigator.pushNewScreen(
                                   context,
-                                  screen: const Payment(),
+                                  screen: const Checkout(),
                                   withNavBar: true,
                                   pageTransitionAnimation:
                                       PageTransitionAnimation.cupertino,

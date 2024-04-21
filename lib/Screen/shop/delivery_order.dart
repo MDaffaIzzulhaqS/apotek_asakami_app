@@ -10,6 +10,10 @@ class DeliveryOrder extends StatefulWidget {
 class DeliveryOrderState extends State<DeliveryOrder> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: Text('Halaman Delivery Order'),
+      ),
+    );
   }
 }

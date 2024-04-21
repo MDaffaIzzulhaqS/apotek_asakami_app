@@ -1,4 +1,4 @@
-import 'package:apotek_asakami_app/Screen/shop/payment.dart';
+import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
 import 'package:apotek_asakami_app/Widget/grid_items.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -47,7 +47,7 @@ class _PurchaseState extends State<Purchase> {
             FloatingActionButton(
               onPressed: () {
                 PersistentNavBarNavigator.pushNewScreen(context,
-                    screen: const Payment(),
+                    screen: const Checkout(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
