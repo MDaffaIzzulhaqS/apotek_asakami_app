@@ -1,6 +1,4 @@
-import 'package:apotek_asakami_app/Screen/shop/delivery_order.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
@@ -166,14 +164,19 @@ class PaymentState extends State<Payment> {
                               ),
                             ],
                           ),
-                          const Icon(Icons.delivery_dining_rounded),
+                          Image.asset(
+                            "assets/images/logo_asakami.png",
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 100,
+                  height: 75,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,13 +210,21 @@ class PaymentState extends State<Payment> {
                         color: Colors.grey,
                       ),
                     ),
-                    Text(
-                      "Rp.$biayaOngkir,00",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    _type == 2
+                        ? Text(
+                            "Rp.$biayaOngkir,00",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : const Text(
+                            "Rp.0,00",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          )
                   ],
                 ),
                 const Divider(
@@ -230,14 +241,23 @@ class PaymentState extends State<Payment> {
                         color: Colors.grey,
                       ),
                     ),
-                    Text(
-                      "Rp.$totalBayar,00",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
+                    _type == 2
+                        ? Text(
+                            "Rp.$totalBayar,00",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          )
+                        : Text(
+                            "Rp.$totalPembelian,00",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          )
                   ],
                 ),
                 const SizedBox(
@@ -245,13 +265,7 @@ class PaymentState extends State<Payment> {
                 ),
                 if (_type == 2)
                   InkWell(
-                    onTap: () => PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: const DeliveryOrder(),
-                      withNavBar: true,
-                      pageTransitionAnimation:
-                          PageTransitionAnimation.cupertino,
-                    ),
+                    onTap: () {},
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -259,17 +273,16 @@ class PaymentState extends State<Payment> {
                         horizontal: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.delivery_dining_rounded),
                           Text(
                             "Cash On Delivery",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -288,17 +301,16 @@ class PaymentState extends State<Payment> {
                         horizontal: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: Colors.purpleAccent,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_pin),
                           Text(
                             "Datang Ke Lokasi",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),

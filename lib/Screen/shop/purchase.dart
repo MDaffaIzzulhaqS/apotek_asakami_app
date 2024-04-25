@@ -55,13 +55,6 @@ class _PurchaseState extends State<Purchase> {
               },
               child: const Icon(Icons.shopping_cart_rounded),
             ),
-            const SizedBox(
-              width: 15,
-            ),
-            FloatingActionButton(
-              onPressed: () {},
-              child: const Icon(Icons.search_rounded),
-            ),
           ],
         ),
       ),
