@@ -1,6 +1,7 @@
+import 'package:apotek_asakami_app/Screen/auth/auth_login.dart';
+import 'package:apotek_asakami_app/Support/common/toast.dart';
 import 'package:apotek_asakami_app/Widget/bottom_navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_exit_app/flutter_exit_app.dart';
 
 void main() {
   runApp(const MainMenu());
@@ -59,7 +60,14 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                           TextButton(
                             onPressed: () {
-                              FlutterExitApp.exitApp();
+                              showToast(message: "User Berhasil Logout");
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                                (route) => false,
+                              );
                             },
                             child: const Text("Ya"),
                           ),

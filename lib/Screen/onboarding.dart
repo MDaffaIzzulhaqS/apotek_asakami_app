@@ -1,4 +1,5 @@
-import 'package:apotek_asakami_app/Screen/main_menu.dart';
+import 'package:apotek_asakami_app/Screen/auth/auth_login.dart';
+// import 'package:apotek_asakami_app/Screen/main_menu.dart';
 import 'package:apotek_asakami_app/Widget/build_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -71,7 +72,7 @@ class _OnBoardingState extends State<OnBoarding> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => const MainMenu(),
+                    builder: (context) => const LoginPage(),
                   ),
                 );
               },
