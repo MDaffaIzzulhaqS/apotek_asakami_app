@@ -53,7 +53,7 @@ class Profile extends StatelessWidget {
             itemProfile(
               'Alamat',
               'Purwokerto',
-              Icons.person_rounded,
+              Icons.home_rounded,
             ),
             const SizedBox(
               height: 20,
