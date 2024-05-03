@@ -1,7 +1,7 @@
 import 'package:apotek_asakami_app/Screen/health_checking/health_checking.dart';
 import 'package:apotek_asakami_app/Screen/home.dart';
 import 'package:apotek_asakami_app/Screen/service.dart';
-import 'package:apotek_asakami_app/Screen/settings.dart';
+import 'package:apotek_asakami_app/Screen/profile.dart';
 import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -19,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
         const Service(),
         const Purchase(),
         const HealthChecking(),
-        const Settings(),
+        const Profile(),
       ];
     }
 
@@ -50,8 +50,8 @@ class BottomNavBar extends StatelessWidget {
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.settings_rounded),
-          title: ("Pengaturan"),
+          icon: const Icon(Icons.person_rounded),
+          title: ("Profile"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),
