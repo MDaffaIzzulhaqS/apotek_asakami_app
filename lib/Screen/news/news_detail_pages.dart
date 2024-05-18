@@ -35,10 +35,9 @@ class NewsDetailPage extends StatelessWidget {
                     children: [
                       Text(
                         article.source.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: Colors.black),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.black,
+                            ),
                       ),
                     ],
                   ),
@@ -46,17 +45,17 @@ class NewsDetailPage extends StatelessWidget {
                   Text(
                     article.title,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        height: 1.25),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          height: 1.25,
+                        ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     article.description,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.black,
+                        ),
                   ),
                 ],
               ),
@@ -98,10 +97,9 @@ class NewsDetailPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   Text(
                     article.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -116,7 +114,7 @@ class NewsDetailPage extends StatelessWidget {
                     onPressed: () {
                       launchUrl(
                         Uri.parse(article.url),
-                        mode: LaunchMode.inAppWebView,
+                        mode: LaunchMode.inAppBrowserView,
                       );
                     },
                     style: ElevatedButton.styleFrom(
