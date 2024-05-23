@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
-import 'package:apotek_asakami_app/Widget/grid_items.dart';
+import 'package:apotek_asakami_app/Screen/shop/purchase_detail.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -11,17 +12,19 @@ class Purchase extends StatefulWidget {
 }
 
 class _PurchaseState extends State<Purchase> {
+  final CollectionReference _products =
+      FirebaseFirestore.instance.collection('products');
   int isSelected = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Padding(
-        padding: EdgeInsets.all(10),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 30,
               child: Text(
                 "Penjualan Obat",
@@ -32,8 +35,34 @@ class _PurchaseState extends State<Purchase> {
                 ),
               ),
             ),
-            Expanded(
-              child: GridItems(),
+            StreamBuilder(
+              stream: _products.snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                var products = snapshot.data?.docs;
+                return ListView.builder(
+                  itemCount: products?.length,
+                  itemBuilder: (context, index) {
+                    var product = products?[index];
+                    return ListTile(
+                      title: Text(product?['name']),
+                      subtitle: Text('\$${product?['price']}'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PurchaseDetail(
+                              productId: product!.id,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),

@@ -183,7 +183,7 @@ class _CheckoutState extends State<Checkout> {
                                   onPressed: () {
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
-                                      screen: const PurchaseDetail(),
+                                      screen: const PurchaseDetail(productId: '',),
                                       withNavBar: true,
                                       pageTransitionAnimation:
                                           PageTransitionAnimation.cupertino,
