@@ -1,13 +1,10 @@
-import 'package:apotek_asakami_app/Screen/health_checking/health_checking.dart';
-import 'package:apotek_asakami_app/Screen/home.dart';
-import 'package:apotek_asakami_app/Screen/service.dart';
-import 'package:apotek_asakami_app/Screen/profile.dart';
-import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
+import 'package:apotek_asakami_app/Screen/admin/product_data.dart';
+import 'package:apotek_asakami_app/Screen/admin/transaction_recap.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+class AdminBottomNavBar extends StatelessWidget {
+  const AdminBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +12,8 @@ class BottomNavBar extends StatelessWidget {
     controller = PersistentTabController(initialIndex: 0);
     List<Widget> buildScreens() {
       return [
-        const Home(),
-        const Service(),
-        Purchase(),
-        const HealthChecking(),
-        const Profile(),
+        const ProductData(),
+        const TransactionRecap(),
       ];
     }
 
@@ -27,31 +21,13 @@ class BottomNavBar extends StatelessWidget {
       return [
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.home_rounded),
-          title: ("Beranda"),
+          title: ("Data Obat"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.inbox_rounded),
-          title: ("Layanan"),
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.grey,
-        ),
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.shopping_bag_rounded),
-          title: ("Pembelian"),
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.grey,
-        ),
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.list_rounded),
-          title: ("Cek Kesehatan"),
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.grey,
-        ),
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.person_rounded),
-          title: ("Profile"),
+          title: ("Rekap"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),

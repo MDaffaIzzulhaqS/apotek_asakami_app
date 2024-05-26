@@ -12,8 +12,11 @@ class Purchase extends StatefulWidget {
 }
 
 class _PurchaseState extends State<Purchase> {
+  var filter = "";
   final CollectionReference _products =
       FirebaseFirestore.instance.collection('products');
+  final TextEditingController _categoryController = TextEditingController();
+
   int isSelected = 0;
 
   @override
@@ -35,34 +38,100 @@ class _PurchaseState extends State<Purchase> {
                 ),
               ),
             ),
-            StreamBuilder(
-              stream: _products.snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                var products = snapshot.data?.docs;
-                return ListView.builder(
-                  itemCount: products?.length,
-                  itemBuilder: (context, index) {
-                    var product = products?[index];
-                    return ListTile(
-                      title: Text(product?['name']),
-                      subtitle: Text('\$${product?['price']}'),
-                      onTap: () {
-                        Navigator.push(
+            Expanded(
+              child: StreamBuilder(
+                stream: (filter.toString().isNotEmpty)
+                    ? _products.where('category', isEqualTo: filter).snapshots()
+                    : _products.snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var product = snapshot.data?.docs[index];
+                      return GestureDetector(
+                        onTap: () => PersistentNavBarNavigator.pushNewScreen(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => PurchaseDetail(
-                              productId: product!.id,
+                          screen: PurchaseDetail(
+                            productId: product!.id,
+                          ),
+                          withNavBar: true,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            title: Text(
+                              product?['name'],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            leading: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                "assets/images/logo_asakami_real.png",
+                              ),
+                            ),
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Kategori Barang : ",
+                                    ),
+                                    Text(
+                                      product?['category'],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Deskripsi Barang : ",
+                                    ),
+                                    Text(
+                                      product?['description'],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Jumlah Barang : ",
+                                    ),
+                                    Text(
+                                      product?['quantity'],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Harga Barang : ",
+                                    ),
+                                    Text(
+                                      "Rp${product?['price'].toString()}",
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -73,6 +142,13 @@ class _PurchaseState extends State<Purchase> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            FloatingActionButton(
+              onPressed: () => _filter(),
+              child: const Icon(Icons.search),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
             FloatingActionButton(
               onPressed: () {
                 PersistentNavBarNavigator.pushNewScreen(
@@ -87,6 +163,47 @@ class _PurchaseState extends State<Purchase> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _filter() async {
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            // prevent the soft keyboard from covering text fields
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _categoryController,
+                decoration: const InputDecoration(labelText: 'Kategori'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                child: const Text('Cari'),
+                onPressed: () {
+                  setState(() {
+                    filter = _categoryController.text;
+                    _categoryController.text = '';
+                  });
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

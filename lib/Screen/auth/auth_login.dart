@@ -1,3 +1,4 @@
+import 'package:apotek_asakami_app/Screen/admin/main_admin.dart';
 import 'package:apotek_asakami_app/Screen/auth/auth_register.dart';
 import 'package:apotek_asakami_app/Screen/main_menu.dart';
 import 'package:apotek_asakami_app/Support/common/toast.dart';
@@ -144,6 +145,39 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Center(
                     child: Text(
                       "Login",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Cuma Sementara Aja
+              const SizedBox(
+                height: 30,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showToast(message: "Admin Berhasil Login");
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPage(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Login Admin",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
