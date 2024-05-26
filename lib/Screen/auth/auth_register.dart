@@ -1,5 +1,5 @@
 import 'package:apotek_asakami_app/Screen/auth/auth_login.dart';
-import 'package:apotek_asakami_app/Support/common/toast.dart';
+import 'package:apotek_asakami_app/Screen/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -13,12 +13,14 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
 
   @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _roleController.dispose();
     super.dispose();
   }
 
@@ -70,15 +72,30 @@ class _RegisterPageState extends State<RegisterPage> {
               TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Password', 
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _roleController,
+                decoration: const InputDecoration(
+                  labelText: 'Role',
                 ),
               ),
               const SizedBox(
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
-                  showToast(message: "User Berhasil Registrasi");
+                onTap: () async {
+                  await AuthService().registerUser(
+                    _emailController.text,
+                    _passwordController.text,
+                    _roleController.text,
+                    _usernameController.text,
+                  );
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

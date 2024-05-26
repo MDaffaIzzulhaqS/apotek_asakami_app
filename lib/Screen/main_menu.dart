@@ -1,6 +1,6 @@
 import 'package:apotek_asakami_app/Screen/auth/auth_login.dart';
-import 'package:apotek_asakami_app/Support/common/toast.dart';
 import 'package:apotek_asakami_app/Widget/bottom_navbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,6 +15,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +60,8 @@ class _MainMenuState extends State<MainMenu> {
                             child: const Text("Tidak"),
                           ),
                           TextButton(
-                            onPressed: () {
-                              showToast(message: "User Berhasil Logout");
+                            onPressed: () async {
+                              await _signOut();
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
@@ -83,5 +84,9 @@ class _MainMenuState extends State<MainMenu> {
       ),
       body: const BottomNavBar(),
     );
+  }
+
+  _signOut() async {
+    await _auth.signOut();
   }
 }

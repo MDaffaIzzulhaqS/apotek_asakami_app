@@ -1,7 +1,7 @@
 import 'package:apotek_asakami_app/Screen/admin/main_admin.dart';
 import 'package:apotek_asakami_app/Screen/auth/auth_register.dart';
+import 'package:apotek_asakami_app/Screen/auth/auth_service.dart';
 import 'package:apotek_asakami_app/Screen/main_menu.dart';
-import 'package:apotek_asakami_app/Support/common/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 
@@ -120,13 +120,18 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(
                   labelText: 'Password',
                 ),
+                obscureText: true,
               ),
               const SizedBox(
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
-                  showToast(message: "User Berhasil Login");
+                onTap: () async {
+                  await AuthService().handleLogin(
+                    _emailController.text,
+                    _passwordController.text,
+                    context,
+                  );
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -159,7 +164,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  showToast(message: "Admin Berhasil Login");
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
