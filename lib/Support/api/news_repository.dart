@@ -1,4 +1,4 @@
-import 'package:apotek_asakami_app/Support/models/news.dart';
+import 'package:apotek_asakami_app/Support/models/news_model.dart';
 
 enum Category { health, general }
 

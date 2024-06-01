@@ -1,4 +1,4 @@
-import 'package:apotek_asakami_app/Support/models/news.dart';
+import 'package:apotek_asakami_app/Support/models/news_model.dart';
 import 'package:apotek_asakami_app/Widget/image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

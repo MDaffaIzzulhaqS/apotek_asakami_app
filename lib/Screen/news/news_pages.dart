@@ -1,7 +1,7 @@
 import 'package:apotek_asakami_app/Screen/news/news_detail_pages.dart';
 import 'package:apotek_asakami_app/Support/api/news_api.dart';
 import 'package:apotek_asakami_app/Support/api/news_repository.dart';
-import 'package:apotek_asakami_app/Support/models/news.dart';
+import 'package:apotek_asakami_app/Support/models/news_model.dart';
 import 'package:apotek_asakami_app/Widget/image_container.dart';
 import 'package:flutter/material.dart';
 

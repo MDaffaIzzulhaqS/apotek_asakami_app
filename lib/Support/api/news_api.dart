@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:apotek_asakami_app/Support/models/news.dart';
+import 'package:apotek_asakami_app/Support/models/news_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'news_repository.dart';

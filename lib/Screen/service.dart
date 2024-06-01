@@ -1,6 +1,5 @@
 import 'package:apotek_asakami_app/Screen/consultation/consultation.dart';
 import 'package:apotek_asakami_app/Screen/homecare/homecare.dart';
-// import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:apotek_asakami_app/Widget/ads_page.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
