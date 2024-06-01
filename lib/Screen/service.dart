@@ -24,6 +24,23 @@ class _ServiceState extends State<Service> {
           const AdsPage(),
           const SizedBox(
             height: 50,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  Text(
+                    "Pilih Konsultasi",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Center(
             child: Column(

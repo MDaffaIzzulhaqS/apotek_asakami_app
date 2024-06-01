@@ -23,6 +23,23 @@ class HealthCheckingState extends State<HealthChecking> {
           const AdsPage(),
           const SizedBox(
             height: 50,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  Text(
+                    "Pilih Cek Kesehatan",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Center(
             child: Column(
