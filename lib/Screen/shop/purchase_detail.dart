@@ -1,4 +1,5 @@
 import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
+// import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -37,6 +38,81 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
 
   final CollectionReference _products =
       FirebaseFirestore.instance.collection('products');
+  final CollectionReference _checkouts =
+      FirebaseFirestore.instance.collection('checkouts');
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+
+  Future<void> _transactionItem() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Center(child: Text("Pembelian")),
+          content: Column(
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nama Barang',
+                ),
+              ),
+              TextField(
+                controller: _quantityController,
+                decoration: const InputDecoration(
+                  labelText: 'Jumlah Barang',
+                ),
+              ),
+              TextField(
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                controller: _priceController,
+                decoration: const InputDecoration(
+                  labelText: 'Harga Barang',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: ElevatedButton(
+                  child: const Text('Beli Barang'),
+                  onPressed: () async {
+                    final String name = _nameController.text;
+                    final String quantity = _quantityController.text;
+                    final double? price =
+                        double.tryParse(_priceController.text);
+                    if (price != null) {
+                      // Persist a new product to Firestore
+                      await _checkouts.add({
+                        "name": name,
+                        "totalQuantity": quantity,
+                        "totalPrice": price,
+                      });
+                      // Clear the text fields
+                      _nameController.text = '';
+                      _quantityController.text = '';
+                      _priceController.text = '';
+                      // Hide the bottom sheet
+                      Navigator.of(context).pop();
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const Checkout(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +139,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
             );
           }
           var product = snapshot.data;
+          var totalHarga = product?['price'] * _counter;
           return Center(
             child: Stack(
               children: [
@@ -104,26 +181,16 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                             left: 25,
                             right: 25,
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  // Ambil Dari Firebase
-                                  product?['name'],
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: Expanded(
+                            child: Text(
+                              // Ambil Dari Firebase
+                              product?['name'],
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
                               ),
-                              InkWell(
-                                onTap: () {},
-                                child: const Icon(
-                                  Icons.favorite_rounded,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -230,7 +297,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                 height: 50,
                                 child: Center(
                                   child: AnimatedOpacity(
-                                    opacity: _counter != 0 ? 1 : 0,
+                                    opacity: 1,
                                     duration: const Duration(milliseconds: 500),
                                     child: Text(
                                       '$_counter',
@@ -301,9 +368,8 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                         fontSize: 14,
                                       ),
                                     ),
-                                    // Harga Bersifat Dinamis Sesuai Jumlah Barang Yang Dibeli
                                     Text(
-                                      'Rp.${product?['price'].toString()},00',
+                                      'Rp.${totalHarga.toString()},00',
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 18,
@@ -317,14 +383,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                 color: Colors.purpleAccent,
                                 borderRadius: BorderRadius.circular(10),
                                 child: InkWell(
-                                  onTap: () =>
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: const Checkout(),
-                                    withNavBar: true,
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                  ),
+                                  onTap: () {
+                                    _transactionItem();
+                                  },
                                   borderRadius: BorderRadius.circular(10),
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -338,7 +399,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                       children: [
                                         Icon(Icons.shopping_cart_rounded),
                                         Text(
-                                          "Tambah Ke Keranjang",
+                                          "Beli Barang",
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,

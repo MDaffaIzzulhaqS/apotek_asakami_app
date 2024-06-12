@@ -28,7 +28,7 @@ class Article {
       url: json['url'] ??
           'https://www.foxnews.com/world/kyiv-rocked-explosions-week-after-russian-strikes-across-ukraine',
       urlToImage: json['urlToImage'] ??
-          'https://www.google.com/url?sa=i&url=https%3A%2F%2Fshopee.co.id%2FApotek-Mini-%2528L%2529-Asakami-by-request-i.846177647.25612757149&psig=AOvVaw0cejWhPRzqgQApu3TP8kLu&ust=1716990385619000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNCRu-O9sIYDFQAAAAAdAAAAABAE',
+          'https://kompaspedia.kompas.id/wp-content/uploads/2020/07/logo_kemkes.png',
       publishedAt: json['publishedAt'] ?? 'No Date',
       content: json['content'] ?? 'No content',
     );

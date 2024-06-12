@@ -1,27 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const CheckoutRecap());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class CheckoutRecap extends StatefulWidget {
+  const CheckoutRecap({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<CheckoutRecap> createState() => _CheckoutRecapState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
+class _CheckoutRecapState extends State<CheckoutRecap> {
+  final CollectionReference _checkouts =
+      FirebaseFirestore.instance.collection('checkouts');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: _checkouts.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -29,17 +28,13 @@ class _TransactionRecapState extends State<TransactionRecap> {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
-                Timestamp timestamp = documentSnapshot['timestamp'];
-                DateTime dateTime = timestamp.toDate();
-                String formattedDate =
-                    DateFormat('EEEE, dd-MM-yyyy, HH:mm').format(dateTime);
                 return Column(
                   children: [
                     Card(
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
                         title: const Text(
-                          "Rekap Pembayaran",
+                          "Rekap Pembelian",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -51,7 +46,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
                           children: [
                             Row(
                               children: [
-                                const Text("Nama: "),
+                                const Text("Nama Produk: "),
                                 Text(
                                   documentSnapshot['name'].toString(),
                                 ),
@@ -59,42 +54,17 @@ class _TransactionRecapState extends State<TransactionRecap> {
                             ),
                             Row(
                               children: [
-                                const Text("Alamat: "),
+                                const Text("Jumlah Pembelian: "),
                                 Text(
-                                  documentSnapshot['address'].toString(),
+                                  documentSnapshot['totalQuantity'].toString(),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Text("Nomor Handphone: "),
+                                const Text("Total Pembyaran: "),
                                 Text(
-                                  documentSnapshot['phone'].toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Total Pembelian: "),
-                                Text(
-                                  documentSnapshot['price'].toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Metode Pembelian: "),
-                                Text(
-                                  documentSnapshot['purchase_method']
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Waktu Pembelian: "),
-                                Text(
-                                  formattedDate.toString(),
+                                  documentSnapshot['totalPrice'].toString(),
                                 ),
                               ],
                             ),

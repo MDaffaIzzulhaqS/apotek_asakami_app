@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Support/models/consultation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DoctorDetailScreen extends StatefulWidget {
   final Doctor doctor;
@@ -11,6 +12,19 @@ class DoctorDetailScreen extends StatefulWidget {
 }
 
 class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
+  final String phoneNumber = '+6281227086943';
+  final String message =
+      'Halo. Saya Ingin Melakukan Konsultasi. Apakah Bisa Dilakukan Hari Ini?';
+
+  Future<void> _bookingDoctor() async {
+    final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeFull(message)}';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +113,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   backgroundColor: Colors.deepPurple[400],
                   minimumSize: const Size.fromHeight(40),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _bookingDoctor();
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

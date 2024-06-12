@@ -1,7 +1,8 @@
 import 'package:apotek_asakami_app/Screen/admin/main_admin.dart';
 import 'package:apotek_asakami_app/Screen/auth/auth_register.dart';
-import 'package:apotek_asakami_app/Screen/auth/auth_service.dart';
 import 'package:apotek_asakami_app/Screen/main_menu.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 
@@ -15,6 +16,46 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _login() async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      User? user = userCredential.user;
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists && userDoc['role'] == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminPage(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainMenu(),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed: ${e.toString()}'),
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -26,62 +67,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Apotek Asakami",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.deepPurple,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(
-            "assets/images/logo_asakami_real.png",
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app_rounded,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: Center(
-                      child: AlertDialog(
-                        title: const Text("Konfirmasi"),
-                        content: const Text(
-                            "Apakah Anda Ingin Keluar Dari Aplikasi?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Tidak"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              FlutterExitApp.exitApp();
-                            },
-                            child: const Text("Ya"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -127,18 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  await AuthService().handleLogin(
-                    _emailController.text,
-                    _passwordController.text,
-                    context,
-                  );
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainMenu(),
-                    ),
-                    (route) => false,
-                  );
+                  await _login();
                 },
                 child: Container(
                   width: double.infinity,
@@ -150,38 +124,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Center(
                     child: Text(
                       "Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // Cuma Sementara Aja
-              const SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AdminPage(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Login Admin",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -219,6 +161,59 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: AlertDialog(
+                            title: const Text("Konfirmasi"),
+                            content: const Text(
+                                "Apakah Anda Ingin Keluar Dari Aplikasi?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Tidak"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  FlutterExitApp.exitApp();
+                                },
+                                child: const Text("Ya"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Keluar Aplikasi",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

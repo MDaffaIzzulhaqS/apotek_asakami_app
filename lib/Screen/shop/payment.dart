@@ -1,4 +1,7 @@
+import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
@@ -8,6 +11,110 @@ class Payment extends StatefulWidget {
 }
 
 class PaymentState extends State<Payment> {
+  final CollectionReference _transaction =
+      FirebaseFirestore.instance.collection('transaction');
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _purchaseMethodController =
+      TextEditingController();
+
+  Future<void> _transactionItem() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Center(child: Text("Pembayaran")),
+          insetPadding: EdgeInsets.zero,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama',
+                  ),
+                ),
+                TextField(
+                  controller: _addressController,
+                  decoration: const InputDecoration(
+                    labelText: 'Alamat',
+                  ),
+                ),
+                TextField(
+                  controller: _phoneNumberController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nomor HP',
+                  ),
+                ),
+                TextField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: _priceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Harga',
+                  ),
+                ),
+                TextField(
+                  controller: _purchaseMethodController,
+                  decoration: const InputDecoration(
+                    labelText: 'Metode Pembelian',
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    child: const Text('Bayar'),
+                    onPressed: () async {
+                      final String name = _nameController.text;
+                      final String address = _addressController.text;
+                      final String phone = _phoneNumberController.text;
+                      final double? price =
+                          double.tryParse(_priceController.text);
+                      final String purchaseMethod =
+                          _purchaseMethodController.text;
+                      if (price != null) {
+                        // Persist a new product to Firestore
+                        await _transaction.add({
+                          "name": name,
+                          "address": address,
+                          "phone": phone,
+                          "price": price,
+                          "purchase_method": purchaseMethod,
+                          "timestamp": FieldValue.serverTimestamp()
+                        });
+                        // Clear the text fields
+                        _nameController.text = '';
+                        _addressController.text = '';
+                        _phoneNumberController.text = '';
+                        _priceController.text = '';
+                        _purchaseMethodController.text = '';
+                        // Hide the bottom sheet
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const Purchase(),
+                          withNavBar: true,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   int _type = 1;
   void _handleRadio(Object? e) => setState(() {
         _type = e as int;
@@ -25,7 +132,7 @@ class PaymentState extends State<Payment> {
     String datangKeLokasi = "Datang Ke Lokasi";
     String cashOnDelivery = "Cash On Delivery";
 
-    int totalPembelian = 20500;
+    int totalPembelian = 50000;
     int biayaOngkir = 2500;
     int totalBayar = totalPembelian + biayaOngkir;
 
@@ -265,7 +372,9 @@ class PaymentState extends State<Payment> {
                 ),
                 if (_type == 2)
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _transactionItem();
+                    },
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -293,7 +402,9 @@ class PaymentState extends State<Payment> {
                   )
                 else
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _transactionItem();
+                    },
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(

@@ -1,6 +1,6 @@
 import 'package:apotek_asakami_app/Screen/shop/payment.dart';
 import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
-import 'package:apotek_asakami_app/Screen/shop/purchase_detail.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -16,24 +16,147 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-  List imagesList = [
-    "assets/images/logo_asakami.png",
-    "assets/images/logo_asakami.png",
-  ];
-  List productTitle = [
-    "Decolgen",
-    "Bodrex",
-  ];
-  List productCategory = [
-    "obat-flu",
-    "obat-batuk",
-  ];
-  List price = [
-    "10000",
-    "10500",
-  ];
+  final CollectionReference _chekouts =
+      FirebaseFirestore.instance.collection('checkouts');
 
-  int totalBayar = 0;
+  // final TextEditingController _nameController = TextEditingController();
+  // final TextEditingController _quantityController = TextEditingController();
+  // final TextEditingController _priceController = TextEditingController();
+
+  // Future<void> _updateCheckout([DocumentSnapshot? documentSnapshot]) async {
+  //   if (documentSnapshot != null) {
+  //     _nameController.text = documentSnapshot['name'];
+  //     _quantityController.text = documentSnapshot['quantity'];
+  //     _priceController.text = documentSnapshot['price'].toString();
+  //   }
+  //   await showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (BuildContext ctx) {
+  //       return Padding(
+  //         padding: EdgeInsets.only(
+  //           top: 20,
+  //           left: 20,
+  //           right: 20,
+  //           // prevent the soft keyboard from covering text fields
+  //           bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+  //         ),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             TextField(
+  //               controller: _nameController,
+  //               decoration: const InputDecoration(labelText: 'Nama'),
+  //             ),
+  //             TextField(
+  //               controller: _quantityController,
+  //               decoration: const InputDecoration(labelText: 'Jumlah'),
+  //             ),
+  //             TextField(
+  //               keyboardType:
+  //                   const TextInputType.numberWithOptions(decimal: true),
+  //               controller: _priceController,
+  //               decoration: const InputDecoration(
+  //                 labelText: 'Harga',
+  //               ),
+  //             ),
+  //             const SizedBox(
+  //               height: 20,
+  //             ),
+  //             ElevatedButton(
+  //               child: const Text("Update"),
+  //               onPressed: () async {
+  //                 final String name = _nameController.text;
+  //                 final String quantity = _quantityController.text;
+  //                 final double? price = double.tryParse(_priceController.text);
+  //                 if (price != null) {
+  //                   await _chekouts.doc(documentSnapshot!.id).update({
+  //                     "name": name,
+  //                     "quantity": quantity,
+  //                     "price": price,
+  //                   });
+  //                 }
+  //                 // Clear the text fields
+  //                 _nameController.text = '';
+  //                 _quantityController.text = '';
+  //                 _priceController.text = '';
+  //                 // Hide the bottom sheet
+  //                 Navigator.of(context).pop();
+  //               },
+  //             )
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Future<void> _deleteCheckout(String productId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text("Hapus Data"),
+          content: const Text("Apakah anda yakin?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await _chekouts.doc(productId).delete();
+                // Show a snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Berhasil Menghapus Data Produk'),
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Ya'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Tidak'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+    Future<void> _completeCheckout(String productId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text("Bayar"),
+          content: const Text("Apakah anda yakin?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await _chekouts.doc(productId).delete();
+                // Show a snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Berhasil Melakukan Pembayaran'),
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Ya'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Tidak'),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,148 +174,174 @@ class _CheckoutState extends State<Checkout> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              totalBayar == 0
-                  ? Center(
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Silahkan Pilih Barang Dahulu",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          InkWell(
-                            onTap: () =>
-                                PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const Purchase(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.shopping_bag_rounded),
-                                  Text(
-                                    "Pilih Barang Disini",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+      body: Expanded(
+        child: StreamBuilder(
+          stream: _chekouts.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: Column(
+                  children: [
+                    const Text(
+                      "Silahkan Pilih Barang Dahulu",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
-                  : SizedBox(
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    InkWell(
+                      onTap: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const Purchase(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shopping_bag_rounded),
+                            Text(
+                              "Pilih Barang Disini",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    SizedBox(
                       height: 450,
                       child: ListView.builder(
-                        itemCount: imagesList.length,
+                        itemCount: snapshot.data!.docs.length,
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Container(
+                          var product = snapshot.data?.docs[index];
+                          return Card(
                             margin: const EdgeInsets.symmetric(
                               vertical: 10,
+                              horizontal: 10,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    imagesList[index],
-                                    height: 90,
-                                    width: 90,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      productTitle[index],
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          "Nama Barang: ",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Text(
+                                          product?['name'],
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Text(
-                                      productCategory[index],
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          "Jumlah Barang: ",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Text(
+                                          product!['totalQuantity'].toString(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Text(
-                                      "Rp." + price[index] + ",00",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          "Harga Barang: ",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Text(
+                                          product['totalPrice'].toString(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                const Row(
-                                  children: [
-                                    Text(
-                                      "1",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                                const SizedBox(
+                                  width: 90,
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: const PurchaseDetail(productId: '',),
-                                      withNavBar: true,
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
+                                    // _updateCheckout();
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _deleteCheckout(product.id);
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 80,
                                 ),
                               ],
                             ),
@@ -200,66 +349,50 @@ class _CheckoutState extends State<Checkout> {
                         },
                       ),
                     ),
-              const SizedBox(
-                height: 80,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Total Bayar : ",
-                    style: TextStyle(
-                      fontSize: 16,
+                    const SizedBox(
+                      height: 60,
                     ),
-                  ),
-                  Text(
-                    "Rp.$totalBayar,00",
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              InkWell(
-                onTap: () => PersistentNavBarNavigator.pushNewScreen(
-                  context,
-                  screen: const Payment(),
-                  withNavBar: true,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                ),
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.attach_money_rounded),
-                      Text(
-                        "Bayar",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                    InkWell(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const Payment(),
+                          withNavBar: true,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.attach_money_rounded),
+                            Text(
+                              "Bayar",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

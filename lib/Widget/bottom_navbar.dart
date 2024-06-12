@@ -1,7 +1,7 @@
 import 'package:apotek_asakami_app/Screen/health_checking/health_checking.dart';
 import 'package:apotek_asakami_app/Screen/home.dart';
-import 'package:apotek_asakami_app/Screen/service.dart';
-import 'package:apotek_asakami_app/Screen/profile.dart';
+import 'package:apotek_asakami_app/Screen/consultation/service.dart';
+import 'package:apotek_asakami_app/Screen/profile/profile.dart';
 import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';

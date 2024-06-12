@@ -216,9 +216,15 @@ class ProductDataState extends State<ProductData> {
                     Card(
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
-                        title: Text(documentSnapshot['name']),
+                        title: Text(
+                          documentSnapshot['name'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         leading: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Image.asset(
                             "assets/images/logo_asakami_real.png",
                           ),
@@ -229,15 +235,27 @@ class ProductDataState extends State<ProductData> {
                           children: [
                             Text(
                               documentSnapshot['category'].toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                             Text(
                               documentSnapshot['description'].toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                             Text(
                               documentSnapshot['quantity'].toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                             Text(
                               documentSnapshot['price'].toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),

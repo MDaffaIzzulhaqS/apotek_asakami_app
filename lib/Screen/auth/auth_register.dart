@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Screen/auth/auth_login.dart';
-import 'package:apotek_asakami_app/Screen/auth/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -13,13 +14,45 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<User?> registerUser(
+      String email, String password, String role, String username, String phone) async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).set(
+          {
+            'username': username,
+            'email': email,
+            'phone': phone,
+            'address': '',
+            'imageProfileUrl': '',
+            'role': role,
+          },
+        );
+        return user;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
   @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _phoneController.dispose();
     _roleController.dispose();
     super.dispose();
   }
@@ -80,6 +113,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 10,
               ),
               TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'Nomor Handphone',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
                 controller: _roleController,
                 decoration: const InputDecoration(
                   labelText: 'Role',
@@ -90,9 +132,10 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  await AuthService().registerUser(
+                  await registerUser(
                     _emailController.text,
                     _passwordController.text,
+                    _phoneController.text,
                     _roleController.text,
                     _usernameController.text,
                   );

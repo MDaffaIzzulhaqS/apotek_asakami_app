@@ -1,5 +1,7 @@
+import 'package:apotek_asakami_app/Screen/admin/checkout_rekap.dart';
 import 'package:apotek_asakami_app/Screen/admin/product_data.dart';
 import 'package:apotek_asakami_app/Screen/admin/transaction_recap.dart';
+import 'package:apotek_asakami_app/Screen/admin/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -14,6 +16,8 @@ class AdminBottomNavBar extends StatelessWidget {
       return [
         const ProductData(),
         const TransactionRecap(),
+        const CheckoutRecap(),
+        const UserData(),
       ];
     }
 
@@ -26,8 +30,20 @@ class AdminBottomNavBar extends StatelessWidget {
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.inbox_rounded),
-          title: ("Rekap"),
+          icon: const Icon(Icons.list_alt_rounded),
+          title: ("Rekap Pembayaran"),
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.list_alt_rounded),
+          title: ("Rekap Pembelian"),
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.person_rounded),
+          title: ("Data Pengguna"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),

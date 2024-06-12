@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Support/models/consultation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomeCareConsulting extends StatefulWidget {
   final Doctor doctor;
@@ -10,6 +11,19 @@ class HomeCareConsulting extends StatefulWidget {
 }
 
 class _HomeCareConsultingState extends State<HomeCareConsulting> {
+  final String phoneNumber = '+6281227086943';
+  final String message =
+      'Halo. Saya Ingin Melakukan Konsultasi Homecare. Apakah Bisa Dilakukan Hari Ini?';
+
+  Future<void> _bookingHomecareDoctor() async {
+    final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeFull(message)}';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +114,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
                   minimumSize: const Size.fromHeight(40),
                 ),
                 onPressed: () {
-                  // _bookingDoctor();
+                  _bookingHomecareDoctor();
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
