@@ -1,6 +1,6 @@
 import 'package:apotek_asakami_app/Support/models/consultation_model.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeCareConsulting extends StatefulWidget {
   final Doctor doctor;
@@ -16,9 +16,11 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
       'Halo. Saya Ingin Melakukan Konsultasi Homecare. Apakah Bisa Dilakukan Hari Ini?';
 
   Future<void> _bookingHomecareDoctor() async {
-    final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeFull(message)}';
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
+    String text =
+        'Halo. Saya Ingin Melakukan Konsultasi. Apakah Bisa Dilakukan Hari Ini?';
+    final url = "whatsapp://send?text=$text";
+    if (await canLaunchUrl(Uri.parse(Uri.encodeFull(url)))) {
+      await launchUrl(Uri.parse(Uri.encodeFull(url)));
     } else {
       throw 'Could not launch $url';
     }

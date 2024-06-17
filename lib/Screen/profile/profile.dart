@@ -16,10 +16,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  // final TextEditingController _usernameController = TextEditingController();
-  // final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _phoneController = TextEditingController();
-  // final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   Future<DocumentSnapshot> getUserData() async {
     User? user = _auth.currentUser;
@@ -29,73 +28,71 @@ class _ProfileState extends State<Profile> {
     throw Exception("User not logged in");
   }
 
-  // Future<void> _updateProfile([DocumentSnapshot? documentSnapshot]) async {
-  //   await showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: context,
-  //     builder: (BuildContext ctx) {
-  //       return Padding(
-  //         padding: EdgeInsets.only(
-  //           top: 20,
-  //           left: 20,
-  //           right: 20,
-  //           // prevent the soft keyboard from covering text fields
-  //           bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             TextField(
-  //               controller: _usernameController,
-  //               decoration: const InputDecoration(labelText: 'Nama'),
-  //             ),
-  //             TextField(
-  //               controller: _emailController,
-  //               decoration: const InputDecoration(labelText: 'Email'),
-  //             ),
-  //             TextField(
-  //               controller: _phoneController,
-  //               decoration: const InputDecoration(labelText: 'No HP'),
-  //             ),
-  //             TextField(
-  //               controller: _addressController,
-  //               decoration: const InputDecoration(labelText: 'Alamat'),
-  //             ),
-  //             const SizedBox(
-  //               height: 20,
-  //             ),
-  //             ElevatedButton(
-  //               child: const Text('Update'),
-  //               onPressed: () async {
-  //                 final String name = _usernameController.text;
-  //                 final String email = _emailController.text;
-  //                 final String phone = _phoneController.text;
-  //                 final String address = _addressController.text;
+  Future<void> _updateProfile([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _usernameController.text = documentSnapshot['username'];
+      _phoneController.text = documentSnapshot['phone'];
+      _addressController.text = documentSnapshot['address'];
+    }
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            // prevent the soft keyboard from covering text fields
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Nama'),
+              ),
+              TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(labelText: 'No HP'),
+              ),
+              TextField(
+                controller: _addressController,
+                decoration: const InputDecoration(labelText: 'Alamat'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                child: const Text('Update'),
+                onPressed: () async {
+                  final String name = _usernameController.text;
+                  final String phone = _phoneController.text;
+                  final String address = _addressController.text;
 
-  //                 // Update the profile
-  //                 await _firestore.doc(documentSnapshot!.id).update({
-  //                   "name": name,
-  //                   "email": email,
-  //                   "phone": phone,
-  //                   "address": address,
-  //                 });
+                  // Update the profile
+                  await _firestore.doc(documentSnapshot!.id).update({
+                    "name": name,
+                    "phone": phone,
+                    "address": address,
+                  });
 
-  //                 // Clear the text fields
-  //                 _usernameController.text = '';
-  //                 _emailController.text = '';
-  //                 _phoneController.text = '';
-  //                 _addressController.text = '';
-  //                 // Hide the bottom sheet
-  //                 Navigator.of(context).pop();
-  //               },
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+                  // Clear the text fields
+                  _usernameController.text = '';
+                  _phoneController.text = '';
+                  _addressController.text = '';
+                  // Hide the bottom sheet
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +168,7 @@ class _ProfileState extends State<Profile> {
                         minimumSize: const Size.fromHeight(40),
                       ),
                       onPressed: () {
-                        // _updateProfile();
+                        _updateProfile();
                       },
                       child: const Text(
                         'Ubah Profil',

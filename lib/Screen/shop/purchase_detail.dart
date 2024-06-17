@@ -50,64 +50,69 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
       builder: (BuildContext ctx) {
         return AlertDialog(
           title: const Center(child: Text("Pembelian")),
-          content: Column(
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Barang',
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 300),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Barang',
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _quantityController,
-                decoration: const InputDecoration(
-                  labelText: 'Jumlah Barang',
+                TextField(
+                  controller: _quantityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Jumlah Barang',
+                  ),
                 ),
-              ),
-              TextField(
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                controller: _priceController,
-                decoration: const InputDecoration(
-                  labelText: 'Harga Barang',
+                TextField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: _priceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Harga Barang',
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: ElevatedButton(
-                  child: const Text('Beli Barang'),
-                  onPressed: () async {
-                    final String name = _nameController.text;
-                    final String quantity = _quantityController.text;
-                    final double? price =
-                        double.tryParse(_priceController.text);
-                    if (price != null) {
-                      // Persist a new product to Firestore
-                      await _checkouts.add({
-                        "name": name,
-                        "totalQuantity": quantity,
-                        "totalPrice": price,
-                      });
-                      // Clear the text fields
-                      _nameController.text = '';
-                      _quantityController.text = '';
-                      _priceController.text = '';
-                      // Hide the bottom sheet
-                      Navigator.of(context).pop();
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: const Checkout(),
-                        withNavBar: true,
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino,
-                      );
-                    }
-                  },
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
+                Center(
+                  child: ElevatedButton(
+                    child: const Text('Beli Barang'),
+                    onPressed: () async {
+                      final String name = _nameController.text;
+                      final String quantity = _quantityController.text;
+                      final double? price =
+                          double.tryParse(_priceController.text);
+                      if (price != null) {
+                        // Persist a new product to Firestore
+                        await _checkouts.add({
+                          "name": name,
+                          "totalQuantity": quantity,
+                          "totalPrice": price,
+                        });
+                        // Clear the text fields
+                        _nameController.text = '';
+                        _quantityController.text = '';
+                        _priceController.text = '';
+                        // Hide the bottom sheet
+                        Future.delayed(const Duration(seconds: 3), () {
+                          Navigator.of(context).pop();
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: const Checkout(),
+                            withNavBar: true,
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

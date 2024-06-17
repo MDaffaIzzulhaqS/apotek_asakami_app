@@ -36,7 +36,7 @@ class NewsDetailPage extends StatelessWidget {
                       Text(
                         article.source.name,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                       ),
                     ],
@@ -46,7 +46,7 @@ class NewsDetailPage extends StatelessWidget {
                     article.title,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
                           height: 1.25,
                         ),
                   ),
@@ -54,7 +54,7 @@ class NewsDetailPage extends StatelessWidget {
                   Text(
                     article.description,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                   ),
                 ],
