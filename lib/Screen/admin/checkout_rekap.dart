@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const CheckoutRecap());
@@ -28,6 +29,10 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
+                Timestamp timestamp = documentSnapshot['timestamp'];
+                DateTime dateTime = timestamp.toDate();
+                String formattedDate =
+                    DateFormat('EEEE, dd-MM-yyyy, HH:mm').format(dateTime);
                 return Column(
                   children: [
                     Card(
@@ -65,6 +70,14 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                                 const Text("Total Pembyaran: "),
                                 Text(
                                   documentSnapshot['totalPrice'].toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Waktu Pembelian: "),
+                                Text(
+                                  formattedDate.toString(),
                                 ),
                               ],
                             ),

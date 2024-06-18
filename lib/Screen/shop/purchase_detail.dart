@@ -1,6 +1,6 @@
 import 'package:apotek_asakami_app/Screen/shop/checkout.dart';
-// import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -81,23 +81,26 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   child: ElevatedButton(
                     child: const Text('Beli Barang'),
                     onPressed: () async {
+                    User? user = FirebaseAuth.instance.currentUser;
                       final String name = _nameController.text;
                       final String quantity = _quantityController.text;
                       final double? price =
                           double.tryParse(_priceController.text);
-                      if (price != null) {
+                      if (price != null && user != null) {
                         // Persist a new product to Firestore
                         await _checkouts.add({
+                          'uid': user.uid,
                           "name": name,
                           "totalQuantity": quantity,
                           "totalPrice": price,
+                          'timestamp': FieldValue.serverTimestamp(),
                         });
                         // Clear the text fields
                         _nameController.text = '';
                         _quantityController.text = '';
                         _priceController.text = '';
                         // Hide the bottom sheet
-                        Future.delayed(const Duration(seconds: 3), () {
+                        Future.delayed(const Duration(seconds: 1), () {
                           Navigator.of(context).pop();
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
@@ -186,7 +189,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                             left: 25,
                             right: 25,
                           ),
-                          child: Expanded(
+                          child: SizedBox(
                             child: Text(
                               // Ambil Dari Firebase
                               product?['name'],
@@ -271,7 +274,8 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                             ),
                           ),
                         ),
-                        Expanded(
+                        SizedBox(
+                          height: 170,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -361,8 +365,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                             ],
                           ),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
+                              SizedBox(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

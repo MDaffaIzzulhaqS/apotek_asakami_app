@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -13,6 +14,8 @@ class Payment extends StatefulWidget {
 class PaymentState extends State<Payment> {
   final CollectionReference _transaction =
       FirebaseFirestore.instance.collection('transaction');
+  // final CollectionReference _checkouts =
+  //     FirebaseFirestore.instance.collection('checkouts');
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -72,6 +75,7 @@ class PaymentState extends State<Payment> {
                     child: ElevatedButton(
                       child: const Text('Bayar'),
                       onPressed: () async {
+                        User? user = FirebaseAuth.instance.currentUser;
                         final String name = _nameController.text;
                         final String address = _addressController.text;
                         final String phone = _phoneNumberController.text;
@@ -79,9 +83,10 @@ class PaymentState extends State<Payment> {
                             double.tryParse(_priceController.text);
                         final String purchaseMethod =
                             _purchaseMethodController.text;
-                        if (price != null) {
+                        if (price != null && user != null) {
                           // Persist a new product to Firestore
                           await _transaction.add({
+                            'uid': user.uid,
                             "name": name,
                             "address": address,
                             "phone": phone,
@@ -96,7 +101,7 @@ class PaymentState extends State<Payment> {
                           _priceController.text = '';
                           _purchaseMethodController.text = '';
                           // Hide the bottom sheet
-                          Future.delayed(const Duration(seconds: 3), () {
+                          Future.delayed(const Duration(seconds: 1), () {
                             Navigator.of(context).pop();
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
@@ -119,6 +124,12 @@ class PaymentState extends State<Payment> {
     );
   }
 
+  String datangKeLokasi = "Datang Ke Lokasi";
+  String cashOnDelivery = "Cash On Delivery";
+
+  int totalPembelian = 50000;
+  int biayaOngkir = 2500;
+
   int _type = 1;
   void _handleRadio(Object? e) => setState(() {
         _type = e as int;
@@ -132,14 +143,7 @@ class PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    String datangKeLokasi = "Datang Ke Lokasi";
-    String cashOnDelivery = "Cash On Delivery";
-
-    int totalPembelian = 50000;
-    int biayaOngkir = 2500;
     int totalBayar = totalPembelian + biayaOngkir;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
