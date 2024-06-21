@@ -1,21 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const CheckoutRecap());
-}
-
-class CheckoutRecap extends StatefulWidget {
-  const CheckoutRecap({super.key});
+class UserCheckoutRecap extends StatefulWidget {
+  const UserCheckoutRecap({super.key});
 
   @override
-  State<CheckoutRecap> createState() => _CheckoutRecapState();
+  State<UserCheckoutRecap> createState() => _UserCheckoutRecapState();
 }
 
-class _CheckoutRecapState extends State<CheckoutRecap> {
-  final CollectionReference _checkouts =
+class _UserCheckoutRecapState extends State<UserCheckoutRecap> {
+  final CollectionReference _chekouts =
       FirebaseFirestore.instance.collection('checkouts');
+
+  Stream<QuerySnapshot> getUserCheckoutData() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return _chekouts.where('uid', isEqualTo: user.uid).snapshots();
+    } else {
+      return const Stream.empty();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +39,20 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: StreamBuilder(
-        stream: _checkouts.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
+      body: Expanded(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: getUserCheckoutData(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length,
+              itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
+                    snapshot.data!.docs[index];
                 Timestamp timestamp = documentSnapshot['timestamp'];
                 DateTime dateTime = timestamp.toDate();
                 String formattedDate =
@@ -52,7 +63,7 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
                         title: const Text(
-                          "Rekap Pembelian",
+                          "Rekap Checkout Pengguna",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -102,11 +113,8 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                 );
               },
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }

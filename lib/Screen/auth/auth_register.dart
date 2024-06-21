@@ -15,12 +15,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<User?> registerUser(
-      String email, String password, String role, String username, String phone) async {
+  Future<User?> registerUser(String email, String password, String role,
+      String username, String phone, String address) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -35,24 +36,29 @@ class _RegisterPageState extends State<RegisterPage> {
             'username': username,
             'email': email,
             'phone': phone,
-            'address': '',
-            'imageProfileUrl': '',
+            'address': address,
             'role': role,
           },
         );
         return user;
       }
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal Registrasi: ${e.toString()}'),
+        ),
+      );
     }
     return null;
   }
+
   @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
+    _addressController.dispose();
     _roleController.dispose();
     super.dispose();
   }
@@ -105,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
               TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Password', 
+                  labelText: 'Password',
                 ),
                 obscureText: true,
               ),
@@ -116,6 +122,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _phoneController,
                 decoration: const InputDecoration(
                   labelText: 'Nomor Handphone',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _addressController,
+                decoration: const InputDecoration(
+                  labelText: 'Alamat',
                 ),
               ),
               const SizedBox(
@@ -133,11 +148,12 @@ class _RegisterPageState extends State<RegisterPage> {
               GestureDetector(
                 onTap: () async {
                   await registerUser(
+                    _usernameController.text,
                     _emailController.text,
                     _passwordController.text,
                     _phoneController.text,
+                    _addressController.text,
                     _roleController.text,
-                    _usernameController.text,
                   );
                   Navigator.pushAndRemoveUntil(
                     context,

@@ -81,7 +81,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   child: ElevatedButton(
                     child: const Text('Beli Barang'),
                     onPressed: () async {
-                    User? user = FirebaseAuth.instance.currentUser;
+                      User? user = FirebaseAuth.instance.currentUser;
                       final String name = _nameController.text;
                       final String quantity = _quantityController.text;
                       final double? price =
@@ -100,16 +100,19 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                         _quantityController.text = '';
                         _priceController.text = '';
                         // Hide the bottom sheet
-                        Future.delayed(const Duration(seconds: 1), () {
-                          Navigator.of(context).pop();
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: const Checkout(),
-                            withNavBar: true,
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                          );
-                        });
+                        Future.delayed(
+                          const Duration(seconds: 1),
+                          () {
+                            Navigator.of(context).pop();
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const Checkout(),
+                              withNavBar: true,
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
+                            );
+                          },
+                        );
                       }
                     },
                   ),
@@ -138,300 +141,304 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: FutureBuilder(
-        future: _products.doc(widget.productId).get(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          var product = snapshot.data;
-          var totalHarga = product?['price'] * _counter;
-          return Center(
-            child: Stack(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .6,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      // Ambil Dari Firebase
-                      image: AssetImage('assets/images/logo_asakami.png'),
-                      fit: BoxFit.cover,
+      body: Expanded(
+        child: FutureBuilder(
+          future: _products.doc(widget.productId).get(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            var product = snapshot.data;
+            var totalHarga = product?['price'] * _counter;
+            return Center(
+              child: Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * .6,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        // Ambil Dari Firebase
+                        image: AssetImage('assets/images/logo_asakami.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * .5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * .5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(.2),
+                            offset: const Offset(0, -4),
+                            blurRadius: 8,
+                          ),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(.2),
-                          offset: const Offset(0, -4),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 15,
-                            left: 25,
-                            right: 25,
-                          ),
-                          child: SizedBox(
-                            child: Text(
-                              // Ambil Dari Firebase
-                              product?['name'],
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 15,
+                              left: 25,
+                              right: 25,
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 15,
-                            left: 25,
-                            right: 25,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
+                            child: SizedBox(
+                              child: Text(
                                 // Ambil Dari Firebase
-                                'Rp.${product?['price'].toString()},00',
+                                product?['name'],
                                 style: const TextStyle(
-                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text(
-                                " / Pcs",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 15,
-                            left: 15,
-                            right: 15,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.lightBlueAccent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              // Ambil Dari Firebase
-                              product?['category'],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 15,
-                            left: 15,
-                            right: 15,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 10,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 15,
+                              left: 25,
+                              right: 25,
                             ),
-                            child: Text(
-                              // Ambil Dari Firebase
-                              product?['description'],
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 170,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _decrementCounter();
-                                },
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      "-",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  // Ambil Dari Firebase
+                                  'Rp.${product?['price'].toString()},00',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: Center(
-                                  child: AnimatedOpacity(
-                                    opacity: 1,
-                                    duration: const Duration(milliseconds: 500),
-                                    child: Text(
-                                      '$_counter',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                const Text(
+                                  " / Pcs",
+                                  style: TextStyle(
+                                    fontSize: 20,
                                   ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _incrementCounter();
-                                },
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.orangeAccent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      "+",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15,
-                            horizontal: 30,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40),
+                              ],
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(.07),
-                                offset: const Offset(0, -3),
-                                blurRadius: 12,
-                              ),
-                            ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Total Harga",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Rp.${totalHarga.toString()},00',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 15,
+                              left: 15,
+                              right: 15,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
                               ),
-                              Material(
-                                color: Colors.purpleAccent,
+                              decoration: BoxDecoration(
+                                color: Colors.lightBlueAccent,
                                 borderRadius: BorderRadius.circular(10),
-                                child: InkWell(
+                              ),
+                              child: Text(
+                                // Ambil Dari Firebase
+                                product?['category'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 15,
+                              left: 15,
+                              right: 15,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: Text(
+                                // Ambil Dari Firebase
+                                product?['description'],
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 170,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
                                   onTap: () {
-                                    _transactionItem();
+                                    _decrementCounter();
                                   },
-                                  borderRadius: BorderRadius.circular(10),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                      horizontal: 10,
-                                    ),
+                                    width: 50,
+                                    height: 50,
                                     decoration: BoxDecoration(
+                                      color: Colors.grey,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: const Row(
-                                      children: [
-                                        Icon(Icons.shopping_cart_rounded),
-                                        Text(
-                                          "Beli Barang",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    child: const Center(
+                                      child: Text(
+                                        "-",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Center(
+                                    child: AnimatedOpacity(
+                                      opacity: 1,
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      child: Text(
+                                        '$_counter',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _incrementCounter();
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.orangeAccent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "+",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 15,
+                              horizontal: 30,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(.07),
+                                  offset: const Offset(0, -3),
+                                  blurRadius: 12,
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Total Harga",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Rp.${totalHarga.toString()},00',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Material(
+                                  color: Colors.purpleAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _transactionItem();
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Row(
+                                        children: [
+                                          Icon(Icons.shopping_cart_rounded),
+                                          Text(
+                                            "Beli Barang",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

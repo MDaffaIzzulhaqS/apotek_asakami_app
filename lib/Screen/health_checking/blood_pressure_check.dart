@@ -25,19 +25,19 @@ class _BloodPressureCheckState extends State<BloodPressureCheck> {
     if (systolic < 120 && diastolic < 80) {
       category = 'Normal';
     } else if (systolic <= 129 && diastolic < 80) {
-      category = 'Elevated';
+      category = 'Tinggi';
     } else if (systolic <= 139 || diastolic <= 89) {
-      category = 'Hypertension Stage 1';
+      category = 'Hipertensi Stadium 1';
     } else if (systolic >= 140 || diastolic >= 90) {
-      category = 'Hypertension Stage 2';
+      category = 'Hipertensi Stadium 2';
     } else if (systolic >= 180 || diastolic >= 120) {
-      category = 'Hypertensive Crisis';
+      category = 'Hipertensi Kritis';
     } else {
       category = 'Invalid Input';
     }
 
     setState(() {
-      _result = 'Category: $category';
+      _result = 'Kategori: $category';
     });
   }
 
@@ -83,6 +83,7 @@ class _BloodPressureCheckState extends State<BloodPressureCheck> {
                 width: 2.0, // Ketebalan garis batas
               ),
             ),
+            margin: const EdgeInsets.all(15),
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 20,
@@ -93,14 +94,14 @@ class _BloodPressureCheckState extends State<BloodPressureCheck> {
                   TextField(
                     controller: _systolicController,
                     decoration: const InputDecoration(
-                      labelText: 'Systolic (mmHg)',
+                      labelText: 'Sistolik (mmHg)',
                     ),
                     keyboardType: TextInputType.number,
                   ),
                   TextField(
                     controller: _diastolicController,
                     decoration: const InputDecoration(
-                      labelText: 'Diastolic (mmHg)',
+                      labelText: 'Diastolik (mmHg)',
                     ),
                     keyboardType: TextInputType.number,
                   ),

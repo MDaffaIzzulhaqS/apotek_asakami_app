@@ -1,4 +1,5 @@
 import 'package:apotek_asakami_app/Screen/admin/main_admin.dart';
+import 'package:apotek_asakami_app/Screen/apoteker/apoteker_main.dart';
 import 'package:apotek_asakami_app/Screen/auth/auth_register.dart';
 import 'package:apotek_asakami_app/Screen/main_menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +40,13 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => const AdminPage(),
             ),
           );
+        } else if (userDoc.exists && userDoc['role'] == 'apoteker') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ApotekerPage(),
+            ),
+          );
         } else {
           Navigator.pushReplacement(
             context,
@@ -51,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Login failed: ${e.toString()}'),
+          content: Text('Gagal Login: ${e.toString()}'),
         ),
       );
     }

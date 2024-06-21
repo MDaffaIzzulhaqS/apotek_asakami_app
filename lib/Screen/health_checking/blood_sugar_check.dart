@@ -24,11 +24,11 @@ class _BloodSugarCheckState extends State<BloodSugarCheck> {
 
   String _categorizeGlucose(double glucose) {
     if (glucose < 70) {
-      return 'Low Blood Sugar';
+      return 'Gula Darah Rendah';
     } else if (glucose >= 70 && glucose <= 99) {
       return 'Normal';
     } else if (glucose >= 100 && glucose <= 125) {
-      return 'Prediabetes';
+      return 'Pradiabetes';
     } else if (glucose >= 126) {
       return 'Diabetes';
     } else {
@@ -72,6 +72,7 @@ class _BloodSugarCheckState extends State<BloodSugarCheck> {
             ),
           ),
           Container(
+            margin: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black, // Warna garis batas
@@ -86,8 +87,8 @@ class _BloodSugarCheckState extends State<BloodSugarCheck> {
                   TextField(
                     controller: _controller,
                     decoration: const InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Enter your blood sugar level (mg/dL)',
+                      border: OutlineInputBorder(),
+                      labelText: 'Masukkan kadar gula darah Anda (mg/dL)',
                     ),
                     keyboardType: TextInputType.number,
                   ),

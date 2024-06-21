@@ -39,19 +39,19 @@ class _FullCheckState extends State<FullCheck> {
     if (systolic < 120 && diastolic < 80) {
       category = 'Normal';
     } else if (systolic <= 129 && diastolic < 80) {
-      category = 'Elevated';
+      category = 'Tinggi';
     } else if (systolic <= 139 || diastolic <= 89) {
-      category = 'Hypertension Stage 1';
+      category = 'Hipertensi Stadium 1';
     } else if (systolic >= 140 || diastolic >= 90) {
-      category = 'Hypertension Stage 2';
+      category = 'Hipertensi Stadium 2';
     } else if (systolic >= 180 || diastolic >= 120) {
-      category = 'Hypertensive Crisis';
+      category = 'Hipertensi Kritis';
     } else {
       category = 'Invalid Input';
     }
 
     setState(() {
-      _bloodpressureresult = 'Category: $category';
+      _bloodpressureresult = 'Kategori: $category';
     });
   }
 
@@ -64,11 +64,11 @@ class _FullCheckState extends State<FullCheck> {
 
   String _categorizeGlucose(double glucose) {
     if (glucose < 70) {
-      return 'Low Blood Sugar';
+      return 'Gula Darah Rendah';
     } else if (glucose >= 70 && glucose <= 99) {
       return 'Normal';
     } else if (glucose >= 100 && glucose <= 125) {
-      return 'Prediabetes';
+      return 'Pradiabetes';
     } else if (glucose >= 126) {
       return 'Diabetes';
     } else {
@@ -89,14 +89,14 @@ class _FullCheckState extends State<FullCheck> {
     if (totalCholesterol < 200) {
       condition = 'Normal';
     } else if (totalCholesterol >= 200 && totalCholesterol <= 239) {
-      condition = 'Borderline High';
+      condition = 'Batas Tinggi';
     } else {
-      condition = 'High';
+      condition = 'Tinggi';
     }
 
     setState(() {
       _cholesterolresult =
-          'Total Cholesterol: $totalCholesterol mg/dL\nCondition: $condition';
+          'Total Kolesterol: $totalCholesterol mg/dL\nKondisi: $condition';
     });
   }
 
@@ -112,11 +112,11 @@ class _FullCheckState extends State<FullCheck> {
       setState(() {
         _uricAcidResult = uricAcid;
         if (uricAcid < 4.0) {
-          _condition = "Low";
+          _condition = "Rendah";
         } else if (uricAcid >= 4.0 && uricAcid <= 8.5) {
           _condition = "Normal";
         } else {
-          _condition = "High";
+          _condition = "Tinggi";
         }
       });
     }
@@ -147,7 +147,7 @@ class _FullCheckState extends State<FullCheck> {
                   const SizedBox(
                     height: 50,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 20, right: 20),
                       child: Row(
                         children: [
                           Text(
@@ -162,6 +162,7 @@ class _FullCheckState extends State<FullCheck> {
                     ),
                   ),
                   Container(
+                    margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.black, // Warna garis batas
@@ -175,7 +176,7 @@ class _FullCheckState extends State<FullCheck> {
               const SizedBox(
                 height: 50,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
                     children: [
                       Text(
@@ -190,6 +191,7 @@ class _FullCheckState extends State<FullCheck> {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black, // Warna garis batas
@@ -201,7 +203,7 @@ class _FullCheckState extends State<FullCheck> {
               const SizedBox(
                 height: 50,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
                     children: [
                       Text(
@@ -216,6 +218,7 @@ class _FullCheckState extends State<FullCheck> {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black, // Warna garis batas
@@ -227,7 +230,7 @@ class _FullCheckState extends State<FullCheck> {
               const SizedBox(
                 height: 50,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
                     children: [
                       Text(
@@ -242,6 +245,7 @@ class _FullCheckState extends State<FullCheck> {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black, // Warna garis batas
@@ -275,7 +279,7 @@ class _FullCheckState extends State<FullCheck> {
           TextField(
             controller: _triglyceridesController,
             decoration:
-                const InputDecoration(labelText: 'Triglycerides (mg/dL)'),
+                const InputDecoration(labelText: 'Trigliserida (mg/dL)'),
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 20),
@@ -361,8 +365,8 @@ class _FullCheckState extends State<FullCheck> {
           TextField(
             controller: _controller,
             decoration: const InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: 'Enter your blood sugar level (mg/dL)',
+              border: OutlineInputBorder(),
+              labelText: 'Masukkan kadar gula darah Anda (mg/dL)',
             ),
             keyboardType: TextInputType.number,
           ),
@@ -392,14 +396,14 @@ class _FullCheckState extends State<FullCheck> {
           TextField(
             controller: _systolicController,
             decoration: const InputDecoration(
-              labelText: 'Systolic (mmHg)',
+              labelText: 'Sistolik (mmHg)',
             ),
             keyboardType: TextInputType.number,
           ),
           TextField(
             controller: _diastolicController,
             decoration: const InputDecoration(
-              labelText: 'Diastolic (mmHg)',
+              labelText: 'Diastolik (mmHg)',
             ),
             keyboardType: TextInputType.number,
           ),

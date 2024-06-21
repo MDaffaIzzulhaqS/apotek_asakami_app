@@ -1,9 +1,6 @@
-import 'package:apotek_asakami_app/Screen/profile/user_checkout_recap.dart';
-import 'package:apotek_asakami_app/Screen/profile/user_payment_recap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 void main() {
   runApp(const Profile());
@@ -159,93 +156,27 @@ class _ProfileState extends State<Profile> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.deepPurple[400],
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            _updateProfile();
-                          },
-                          child: const Text(
-                            'Ubah Profil',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.deepPurple[400],
+                        minimumSize: const Size.fromHeight(40),
+                      ),
+                      onPressed: () {
+                        _updateProfile();
+                      },
+                      child: const Text(
+                        'Ubah Profil',
+                        style: TextStyle(
+                          fontSize: 16,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.pink,
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const UserCheckoutRecap(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: const Text(
-                            'Rekap Pembelian',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.pink,
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const UserPaymentRecap(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: const Text(
-                            'Rekap Pembayaran',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),

@@ -18,6 +18,19 @@ class _UserDataState extends State<UserData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Data Pengguna",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
       // Using StreamBuilder to display all products from Firestore in real-time
       body: StreamBuilder(
         stream: _users.snapshots(),
@@ -31,12 +44,12 @@ class _UserDataState extends State<UserData> {
                 return Column(
                   children: [
                     Card(
-                      margin: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(5),
                       child: ListTile(
                         title: Row(
                           children: [
                             const Text(
-                              "Nama Pengguna: ",
+                              "Nama: ",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -59,7 +72,7 @@ class _UserDataState extends State<UserData> {
                           children: [
                             Row(
                               children: [
-                                const Text("Email Pengguna: "),
+                                const Text("Email: "),
                                 Text(
                                   documentSnapshot['email'].toString(),
                                 ),
@@ -67,7 +80,7 @@ class _UserDataState extends State<UserData> {
                             ),
                             Row(
                               children: [
-                                const Text("No HP Pengguna: "),
+                                const Text("No HP: "),
                                 Text(
                                   documentSnapshot['phone'].toString(),
                                 ),
@@ -75,7 +88,7 @@ class _UserDataState extends State<UserData> {
                             ),
                             Row(
                               children: [
-                                const Text("Role Pengguna: "),
+                                const Text("Role: "),
                                 Text(
                                   documentSnapshot['role'].toString(),
                                 ),

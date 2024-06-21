@@ -39,19 +39,19 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
     if (systolic < 120 && diastolic < 80) {
       category = 'Normal';
     } else if (systolic <= 129 && diastolic < 80) {
-      category = 'Elevated';
+      category = 'Tinggi';
     } else if (systolic <= 139 || diastolic <= 89) {
-      category = 'Hypertension Stage 1';
+      category = 'Hipertensi Stadium 1';
     } else if (systolic >= 140 || diastolic >= 90) {
-      category = 'Hypertension Stage 2';
+      category = 'Hipertensi Stadium 2';
     } else if (systolic >= 180 || diastolic >= 120) {
-      category = 'Hypertensive Crisis';
+      category = 'Hipertensi Kritis';
     } else {
       category = 'Invalid Input';
     }
 
     setState(() {
-      _bloodpressureresult = 'Category: $category';
+      _bloodpressureresult = 'Kategori: $category';
     });
   }
 
@@ -64,11 +64,11 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
 
   String _categorizeGlucose(double glucose) {
     if (glucose < 70) {
-      return 'Low Blood Sugar';
+      return 'Gula Darah Rendah';
     } else if (glucose >= 70 && glucose <= 99) {
       return 'Normal';
     } else if (glucose >= 100 && glucose <= 125) {
-      return 'Prediabetes';
+      return 'Pradiabetes';
     } else if (glucose >= 126) {
       return 'Diabetes';
     } else {
@@ -89,14 +89,14 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
     if (totalCholesterol < 200) {
       condition = 'Normal';
     } else if (totalCholesterol >= 200 && totalCholesterol <= 239) {
-      condition = 'Borderline High';
+      condition = 'Batas Tinggi';
     } else {
-      condition = 'High';
+      condition = 'Tinggi';
     }
 
     setState(() {
       _cholesterolresult =
-          'Total Cholesterol: $totalCholesterol mg/dL\nCondition: $condition';
+          'Total Kolesterol: $totalCholesterol mg/dL\nKondisi: $condition';
     });
   }
 
@@ -112,11 +112,11 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
       setState(() {
         _uricAcidResult = uricAcid;
         if (uricAcid < 4.0) {
-          _condition = "Low";
+          _condition = "Rendah";
         } else if (uricAcid >= 4.0 && uricAcid <= 8.5) {
           _condition = "Normal";
         } else {
-          _condition = "High";
+          _condition = "Tinggi";
         }
       });
     }
@@ -139,113 +139,123 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
-              child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      "Cek Tekanan Darah",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+        child: Card(
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Cek Tekanan Darah",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Warna garis batas
-                  width: 2.0, // Ketebalan garis batas
-                ),
-              ),
-              child: bloodPressure(),
-            ),
-            const SizedBox(
-              height: 50,
-              child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      "Cek Gula Darah",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black, // Warna garis batas
+                        width: 2.0, // Ketebalan garis batas
                       ),
                     ),
-                  ],
-                ),
+                    child: bloodPressure(),
+                  ),
+                ],
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Warna garis batas
-                  width: 2.0, // Ketebalan garis batas
-                ),
-              ),
-              child: bloodSugar(),
-            ),
-            const SizedBox(
-              height: 50,
-              child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      "Cek Asam Urat",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+              const SizedBox(
+                height: 50,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Cek Gula Darah",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Warna garis batas
-                  width: 2.0, // Ketebalan garis batas
+              Container(
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black, // Warna garis batas
+                    width: 2.0, // Ketebalan garis batas
+                  ),
                 ),
+                child: bloodSugar(),
               ),
-              child: uricAcid(),
-            ),
-            const SizedBox(
-              height: 50,
-              child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      "Cek Kolesterol",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+              const SizedBox(
+                height: 50,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Cek Asam Urat",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Warna garis batas
-                  width: 2.0, // Ketebalan garis batas
+              Container(
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black, // Warna garis batas
+                    width: 2.0, // Ketebalan garis batas
+                  ),
+                ),
+                child: uricAcid(),
+              ),
+              const SizedBox(
+                height: 50,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Cek Kolesterol",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: cholesterol(),
-            ),
-          ],
+              Container(
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black, // Warna garis batas
+                    width: 2.0, // Ketebalan garis batas
+                  ),
+                ),
+                child: cholesterol(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -269,7 +279,7 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
           TextField(
             controller: _triglyceridesController,
             decoration:
-                const InputDecoration(labelText: 'Triglycerides (mg/dL)'),
+                const InputDecoration(labelText: 'Trigliserida (mg/dL)'),
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 20),
@@ -355,8 +365,8 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
           TextField(
             controller: _controller,
             decoration: const InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: 'Enter your blood sugar level (mg/dL)',
+              border: OutlineInputBorder(),
+              labelText: 'Masukkan kadar gula darah Anda (mg/dL)',
             ),
             keyboardType: TextInputType.number,
           ),
@@ -386,14 +396,14 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
           TextField(
             controller: _systolicController,
             decoration: const InputDecoration(
-              labelText: 'Systolic (mmHg)',
+              labelText: 'Sistolik (mmHg)',
             ),
             keyboardType: TextInputType.number,
           ),
           TextField(
             controller: _diastolicController,
             decoration: const InputDecoration(
-              labelText: 'Diastolic (mmHg)',
+              labelText: 'Diastolik (mmHg)',
             ),
             keyboardType: TextInputType.number,
           ),

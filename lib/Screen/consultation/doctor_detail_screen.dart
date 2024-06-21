@@ -12,16 +12,13 @@ class DoctorDetailScreen extends StatefulWidget {
 }
 
 class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
+
   Future<void> _bookingDoctor() async {
-    String text =
-        'Halo. Saya Ingin Melakukan Konsultasi. Apakah Bisa Dilakukan Hari Ini?';
-    final url = "whatsapp://send?text=$text";
-    if (await canLaunchUrl(Uri.parse(Uri.encodeFull(url)))) {
-      await launchUrl(Uri.parse(Uri.encodeFull(url)),
-          mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
-    }
+    const url = "https://s.id/whatsapp_apoteker";
+    launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   @override

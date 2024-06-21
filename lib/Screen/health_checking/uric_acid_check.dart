@@ -32,11 +32,11 @@ class _UridAcidCheckState extends State<UridAcidCheck> {
       setState(() {
         _uricAcidResult = uricAcid;
         if (uricAcid < 4.0) {
-          _condition = "Low";
+          _condition = "Rendah";
         } else if (uricAcid >= 4.0 && uricAcid <= 8.5) {
           _condition = "Normal";
         } else {
-          _condition = "High";
+          _condition = "Tinggi";
         }
       });
     }
@@ -78,6 +78,7 @@ class _UridAcidCheckState extends State<UridAcidCheck> {
             ),
           ),
           Container(
+            margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black, // Warna garis batas

@@ -1,28 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const CheckoutRecap());
-}
-
-class CheckoutRecap extends StatefulWidget {
-  const CheckoutRecap({super.key});
+class UserPaymentRecap extends StatefulWidget {
+  const UserPaymentRecap({super.key});
 
   @override
-  State<CheckoutRecap> createState() => _CheckoutRecapState();
+  State<UserPaymentRecap> createState() => _UserPaymentRecapState();
 }
 
-class _CheckoutRecapState extends State<CheckoutRecap> {
-  final CollectionReference _checkouts =
-      FirebaseFirestore.instance.collection('checkouts');
+class _UserPaymentRecapState extends State<UserPaymentRecap> {
+  final CollectionReference _transaction =
+      FirebaseFirestore.instance.collection('transaction');
+
+  Stream<QuerySnapshot> getUserTransactionData() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return _transaction.where('uid', isEqualTo: user.uid).snapshots();
+    } else {
+      return const Stream.empty();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembelian",
+          "Rekap Pembayaran",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -33,15 +39,20 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: StreamBuilder(
-        stream: _checkouts.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
+      body: Expanded(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: getUserTransactionData(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length,
+              itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
+                    snapshot.data!.docs[index];
                 Timestamp timestamp = documentSnapshot['timestamp'];
                 DateTime dateTime = timestamp.toDate();
                 String formattedDate =
@@ -52,7 +63,7 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
                         title: const Text(
-                          "Rekap Pembelian",
+                          "Rekap Pembayaran",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -64,7 +75,7 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                           children: [
                             Row(
                               children: [
-                                const Text("Nama Produk: "),
+                                const Text("Nama: "),
                                 Text(
                                   documentSnapshot['name'].toString(),
                                 ),
@@ -72,17 +83,34 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                             ),
                             Row(
                               children: [
-                                const Text("Jumlah Pembelian: "),
+                                const Text("Alamat: "),
                                 Text(
-                                  documentSnapshot['totalQuantity'].toString(),
+                                  documentSnapshot['address'].toString(),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Text("Total Pembayaran: "),
+                                const Text("Nomor Handphone: "),
                                 Text(
-                                  documentSnapshot['totalPrice'].toString(),
+                                  documentSnapshot['phone'].toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Total Pembelian: "),
+                                Text(
+                                  documentSnapshot['price'].toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Metode Pembelian: "),
+                                Text(
+                                  documentSnapshot['purchase_method']
+                                      .toString(),
                                 ),
                               ],
                             ),
@@ -102,11 +130,8 @@ class _CheckoutRecapState extends State<CheckoutRecap> {
                 );
               },
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }

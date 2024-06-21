@@ -199,6 +199,19 @@ class ProductDataState extends State<ProductData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Data Produk",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
       // Using StreamBuilder to display all products from Firestore in real-time
       body: StreamBuilder(
         stream: (filter.toString().isNotEmpty)

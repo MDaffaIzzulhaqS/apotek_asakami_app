@@ -32,14 +32,14 @@ class _CholesterolCheckState extends State<CholesterolCheck> {
     if (totalCholesterol < 200) {
       condition = 'Normal';
     } else if (totalCholesterol >= 200 && totalCholesterol <= 239) {
-      condition = 'Borderline High';
+      condition = 'Batas Tinggi';
     } else {
-      condition = 'High';
+      condition = 'Tinggi';
     }
 
     setState(() {
       _result =
-          'Total Cholesterol: $totalCholesterol mg/dL\nCondition: $condition';
+          'Total Kolesterol: $totalCholesterol mg/dL\nKondisi: $condition';
     });
   }
 
@@ -79,6 +79,7 @@ class _CholesterolCheckState extends State<CholesterolCheck> {
             ),
           ),
           Container(
+            margin: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black, // Warna garis batas
@@ -102,7 +103,7 @@ class _CholesterolCheckState extends State<CholesterolCheck> {
                   TextField(
                     controller: _triglyceridesController,
                     decoration:
-                        const InputDecoration(labelText: 'Triglycerides (mg/dL)'),
+                        const InputDecoration(labelText: 'Trigliserida (mg/dL)'),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 20),
