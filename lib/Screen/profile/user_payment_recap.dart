@@ -28,7 +28,7 @@ class _UserPaymentRecapState extends State<UserPaymentRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Riwayat Pembayaran Pengguna",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class _UserPaymentRecapState extends State<UserPaymentRecap> {
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
                         title: const Text(
-                          "Rekap Pembayaran",
+                          "Riwayat Pembayaran Pengguna",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

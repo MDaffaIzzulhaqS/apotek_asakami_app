@@ -207,7 +207,7 @@ class _ProfileState extends State<Profile> {
                             );
                           },
                           child: const Text(
-                            'Rekap Pembelian',
+                            'Riwayat Pembelian',
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -238,7 +238,7 @@ class _ProfileState extends State<Profile> {
                             );
                           },
                           child: const Text(
-                            'Rekap Pembayaran',
+                            'Riwayat Pembayaran',
                             style: TextStyle(
                               fontSize: 16,
                             ),

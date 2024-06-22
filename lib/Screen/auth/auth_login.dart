@@ -47,11 +47,17 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => const ApotekerPage(),
             ),
           );
-        } else {
+        } else if (userDoc.exists && userDoc['role'] == 'user') {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const MainMenu(),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ada Kesalahan Ketika Login'),
             ),
           );
         }

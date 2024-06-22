@@ -28,7 +28,7 @@ class _UserCheckoutRecapState extends State<UserCheckoutRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembelian",
+          "Riwayat Pembelian Pengguna",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class _UserCheckoutRecapState extends State<UserCheckoutRecap> {
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
                         title: const Text(
-                          "Rekap Checkout Pengguna",
+                          "Riwayat Pembelian Pengguna",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
