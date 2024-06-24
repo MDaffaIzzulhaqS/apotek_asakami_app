@@ -83,6 +83,7 @@ class PaymentState extends State<Payment> {
                             double.tryParse(_priceController.text);
                         final String purchaseMethod =
                             _purchaseMethodController.text;
+                        const String status = "Belum Bayar";
                         if (price != null && user != null) {
                           // Persist a new product to Firestore
                           await _transaction.add({
@@ -92,6 +93,7 @@ class PaymentState extends State<Payment> {
                             "phone": phone,
                             "price": price,
                             "purchase_method": purchaseMethod,
+                            "status": status,
                             "timestamp": FieldValue.serverTimestamp()
                           });
                           // Clear the text fields

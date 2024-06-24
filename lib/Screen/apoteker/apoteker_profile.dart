@@ -3,17 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const Profile());
+  runApp(const ApotekerProfile());
 }
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class ApotekerProfile extends StatefulWidget {
+  const ApotekerProfile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ApotekerProfile> createState() => _ApotekerProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ApotekerProfileState extends State<ApotekerProfile> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _usernameController = TextEditingController();

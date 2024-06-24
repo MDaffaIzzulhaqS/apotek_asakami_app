@@ -16,6 +16,54 @@ class TransactionRecap extends StatefulWidget {
 class _TransactionRecapState extends State<TransactionRecap> {
   final CollectionReference _transaction =
       FirebaseFirestore.instance.collection('transaction');
+  final TextEditingController _statusController = TextEditingController();
+
+  Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _statusController.text = documentSnapshot['status'];
+    }
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            // prevent the soft keyboard from covering text fields
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _statusController,
+                decoration: const InputDecoration(labelText: 'Status Pembayaran'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                child: const Text('Update'),
+                onPressed: () async {
+                  final String status = _statusController.text;
+                  await _transaction.doc(documentSnapshot!.id).update({
+                    "status": status,
+                  });
+                  // Clear the text fields
+                  _statusController.text = '';
+                  // Hide the bottom sheet
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +114,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
                               children: [
                                 const Text("Nama: "),
                                 Text(
-                                  documentSnapshot['name'].toString(),
+                                  documentSnapshot['status'].toString(),
                                 ),
                               ],
                             ),
@@ -112,6 +160,18 @@ class _TransactionRecapState extends State<TransactionRecap> {
                               ],
                             ),
                           ],
+                        ),
+                        trailing: SizedBox(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              // Press this button to edit a single product
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => updateStatus(documentSnapshot),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

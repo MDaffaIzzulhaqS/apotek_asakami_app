@@ -1,3 +1,4 @@
+import 'package:apotek_asakami_app/Screen/apoteker/apoteker_profile.dart';
 import 'package:apotek_asakami_app/Screen/apoteker/checkout_rekap.dart';
 import 'package:apotek_asakami_app/Screen/apoteker/transaction_recap.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +15,12 @@ class ApotekerBottomNavBar extends StatelessWidget {
       return [
         const TransactionRecap(),
         const CheckoutRecap(),
+        const ApotekerProfile(),
       ];
     }
 
     List<PersistentBottomNavBarItem> navBarsItems() {
       return [
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.home_rounded),
-          title: ("Data Obat"),
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.grey,
-        ),
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.list_alt_rounded),
           title: ("Rekap Pembayaran"),
@@ -39,7 +35,7 @@ class ApotekerBottomNavBar extends StatelessWidget {
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.person_rounded),
-          title: ("Data Pengguna"),
+          title: ("Profil"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),

@@ -105,6 +105,14 @@ class _TransactionRecapState extends State<TransactionRecap> {
                             ),
                             Row(
                               children: [
+                                const Text("Status Pembayaran: "),
+                                Text(
+                                  documentSnapshot['status'].toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
                                 const Text("Waktu Pembelian: "),
                                 Text(
                                   formattedDate.toString(),

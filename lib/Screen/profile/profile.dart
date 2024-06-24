@@ -173,7 +173,7 @@ class _ProfileState extends State<Profile> {
                             minimumSize: const Size.fromHeight(40),
                           ),
                           onPressed: () {
-                            _updateProfile();
+                            _updateProfile(userData as DocumentSnapshot<Object?>?);
                           },
                           child: const Text(
                             'Ubah Profil',

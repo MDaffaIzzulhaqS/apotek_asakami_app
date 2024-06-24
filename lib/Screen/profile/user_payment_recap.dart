@@ -116,6 +116,14 @@ class _UserPaymentRecapState extends State<UserPaymentRecap> {
                             ),
                             Row(
                               children: [
+                                const Text("Status Pembayaran: "),
+                                Text(
+                                  documentSnapshot['status'].toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
                                 const Text("Waktu Pembelian: "),
                                 Text(
                                   formattedDate.toString(),
