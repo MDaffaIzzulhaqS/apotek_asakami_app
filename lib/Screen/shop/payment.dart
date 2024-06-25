@@ -24,7 +24,7 @@ class PaymentState extends State<Payment> {
   final TextEditingController _purchaseMethodController =
       TextEditingController();
 
-  Future<void> _transactionItem() async {
+  Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
     await showDialog(
       context: context,
       builder: (BuildContext ctx) {
@@ -416,7 +416,7 @@ class PaymentState extends State<Payment> {
                       if (_type == 2)
                         InkWell(
                           onTap: () {
-                            _transactionItem();
+                            _transactionItem(snapshot as DocumentSnapshot<Object?>?);
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(

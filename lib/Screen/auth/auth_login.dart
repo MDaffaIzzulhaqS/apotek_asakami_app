@@ -98,8 +98,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Image.asset(
                 "assets/images/logo_asakami.png",
-                width: 90,
-                height: 90,
+                width: 100,
+                height: 100,
                 fit: BoxFit.cover,
               ),
               const SizedBox(

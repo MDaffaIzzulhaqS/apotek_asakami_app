@@ -44,7 +44,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  Future<void> _transactionItem() async {
+  Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
     await showDialog(
       context: context,
       builder: (BuildContext ctx) {
@@ -153,7 +153,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
             var product = snapshot.data;
             var totalHarga = product?['price'] * _counter;
             return Center(
-              child: Stack(
+              child: Column(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -400,7 +400,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: InkWell(
                                     onTap: () {
-                                      _transactionItem();
+                                      _transactionItem(product);
                                     },
                                     borderRadius: BorderRadius.circular(10),
                                     child: Container(
