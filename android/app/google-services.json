@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408216932264",
+    "project_id": "apotekasakamiapp",
+    "storage_bucket": "apotekasakamiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408216932264:android:1bc0846c36edec5b9b979d",
+        "android_client_info": {
+          "package_name": "com.example.apotek_asakami_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWLQMxB2iqN6gWrnpTm0n6fxKy-xmTyp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
