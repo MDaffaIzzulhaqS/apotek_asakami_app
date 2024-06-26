@@ -18,61 +18,56 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
 
-  _login() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
+  Future<void> _login() async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-        User? user = userCredential.user;
-        if (user != null) {
-          DocumentSnapshot userDoc = await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .get();
+      User? user = userCredential.user;
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
-          if (userDoc.exists && userDoc['role'] == 'admin') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AdminPage(),
-              ),
-            );
-          } else if (userDoc.exists && userDoc['role'] == 'apoteker') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ApotekerPage(),
-              ),
-            );
-          } else if (userDoc.exists && userDoc['role'] == 'user') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainMenu(),
-              ),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Ada Kesalahan Ketika Login'),
-              ),
-            );
-          }
+        if (userDoc.exists && userDoc['role'] == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminPage(),
+            ),
+          );
+        } else if (userDoc.exists && userDoc['role'] == 'apoteker') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ApotekerPage(),
+            ),
+          );
+        } else if (userDoc.exists && userDoc['role'] == 'user') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainMenu(),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ada Kesalahan Ketika Login'),
+            ),
+          );
         }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gagal Login: ${e.toString()}'),
-          ),
-        );
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal Login: ${e.toString()}'),
+        ),
+      );
     }
   }
 
@@ -91,9 +86,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(
             horizontal: 15,
           ),
-          child: Form(
-            key: _formKey,
-            child: Column(
+          child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
@@ -112,36 +105,17 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
+                TextField(
+                  controller: _emailController,
                   decoration: const InputDecoration(labelText: 'Email'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email tidak boleh kosong';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Email tidak valid';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    email = value;
-                  },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
+                TextField(
+                  controller: _passwordController,
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    password = value;
-                  },
                 ),
                 const SizedBox(
                   height: 30,
@@ -255,7 +229,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }

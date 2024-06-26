@@ -66,7 +66,7 @@ class _HomeCareState extends State<HomeCare> {
             ),
           ),
           SizedBox(
-            width: 250,
+            width: 300,
             child: TextButton(
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(

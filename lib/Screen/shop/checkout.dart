@@ -20,78 +20,78 @@ class _CheckoutState extends State<Checkout> {
   final CollectionReference _chekouts =
       FirebaseFirestore.instance.collection('checkouts');
 
-  // final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _quantityController = TextEditingController();
-  // final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
-  // Future<void> _updateCheckout([DocumentSnapshot? documentSnapshot]) async {
-  //   if (documentSnapshot != null) {
-  //     _nameController.text = documentSnapshot['name'];
-  //     _quantityController.text = documentSnapshot['quantity'];
-  //     _priceController.text = documentSnapshot['price'].toString();
-  //   }
-  //   await showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: context,
-  //     builder: (BuildContext ctx) {
-  //       return Padding(
-  //         padding: EdgeInsets.only(
-  //           top: 20,
-  //           left: 20,
-  //           right: 20,
-  //           // prevent the soft keyboard from covering text fields
-  //           bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             TextField(
-  //               controller: _nameController,
-  //               decoration: const InputDecoration(labelText: 'Nama'),
-  //             ),
-  //             TextField(
-  //               controller: _quantityController,
-  //               decoration: const InputDecoration(labelText: 'Jumlah'),
-  //             ),
-  //             TextField(
-  //               keyboardType:
-  //                   const TextInputType.numberWithOptions(decimal: true),
-  //               controller: _priceController,
-  //               decoration: const InputDecoration(
-  //                 labelText: 'Harga',
-  //               ),
-  //             ),
-  //             const SizedBox(
-  //               height: 20,
-  //             ),
-  //             ElevatedButton(
-  //               child: const Text("Update"),
-  //               onPressed: () async {
-  //                 final String name = _nameController.text;
-  //                 final String quantity = _quantityController.text;
-  //                 final double? price = double.tryParse(_priceController.text);
-  //                 if (price != null) {
-  //                   await _chekouts.doc(documentSnapshot!.id).update({
-  //                     "name": name,
-  //                     "quantity": quantity,
-  //                     "price": price,
-  //                   });
-  //                 }
-  //                 // Clear the text fields
-  //                 _nameController.text = '';
-  //                 _quantityController.text = '';
-  //                 _priceController.text = '';
-  //                 // Hide the bottom sheet
-  //                 Navigator.of(context).pop();
-  //               },
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  Future<void> _updateCheckout([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _nameController.text = documentSnapshot['name'];
+      _quantityController.text = documentSnapshot['totalQuantity'];
+      _priceController.text = documentSnapshot['totalPrice'].toString();
+    }
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            // prevent the soft keyboard from covering text fields
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Nama'),
+              ),
+              TextField(
+                controller: _quantityController,
+                decoration: const InputDecoration(labelText: 'Jumlah'),
+              ),
+              TextField(
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                controller: _priceController,
+                decoration: const InputDecoration(
+                  labelText: 'Harga',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                child: const Text("Update"),
+                onPressed: () async {
+                  final String name = _nameController.text;
+                  final String quantity = _quantityController.text;
+                  final double? price = double.tryParse(_priceController.text);
+                  if (price != null) {
+                    await _chekouts.doc(documentSnapshot!.id).update({
+                      "name": name,
+                      "quantity": quantity,
+                      "price": price,
+                    });
+                  }
+                  // Clear the text fields
+                  _nameController.text = '';
+                  _quantityController.text = '';
+                  _priceController.text = '';
+                  // Hide the bottom sheet
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Future<void> _deleteCheckout(String productId) async {
     showDialog(
@@ -108,39 +108,6 @@ class _CheckoutState extends State<Checkout> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Berhasil Menghapus Data Checkout'),
-                  ),
-                );
-                Navigator.pop(context);
-              },
-              child: const Text('Ya'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Tidak'),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _completeCheckout(String productId) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          title: const Text("Bayar"),
-          content: const Text("Apakah anda yakin?"),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                await _chekouts.doc(productId).delete();
-                // Show a snackbar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Berhasil Melakukan Pembayaran'),
                   ),
                 );
                 Navigator.pop(context);
@@ -343,7 +310,7 @@ class _CheckoutState extends State<Checkout> {
                               IconButton(
                                 icon: const Icon(Icons.edit),
                                 onPressed: () {
-                                  // _updateCheckout();
+                                  _updateCheckout(product);
                                 },
                               ),
                               IconButton(

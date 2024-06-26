@@ -42,111 +42,132 @@ class HealthCheckingState extends State<HealthChecking> {
             height: 20,
           ),
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const BloodPressureCheck(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.purpleAccent,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 300,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const BloodPressureCheck(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purpleAccent,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.monitor_heart_rounded),
+                      label: const Text('Cek Tekanan Darah'),
                     ),
                   ),
-                  icon: const Icon(Icons.list_alt_rounded),
-                  label: const Text('Cek Tekanan Darah'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const BloodSugarCheck(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  const SizedBox(
+                    height: 10,
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.purpleAccent,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+                  SizedBox(
+                    width: 300,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const BloodSugarCheck(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purpleAccent,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.local_pharmacy_rounded),
+                      label: const Text('Cek Gula Darah'),
                     ),
                   ),
-                  icon: const Icon(Icons.list_alt_rounded),
-                  label: const Text('Cek Gula Darah'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const UridAcidCheck(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  const SizedBox(
+                    height: 10,
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.purpleAccent,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+                  SizedBox(
+                    width: 300,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const UridAcidCheck(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purpleAccent,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.health_and_safety_rounded),
+                      label: const Text('Cek Asam Urat'),
                     ),
                   ),
-                  icon: const Icon(Icons.list_alt_rounded),
-                  label: const Text('Cek Asam Urat'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const CholesterolCheck(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  const SizedBox(
+                    height: 10,
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.purpleAccent,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+                  SizedBox(
+                    width: 300,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const CholesterolCheck(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purpleAccent,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.local_hospital_rounded),
+                      label: const Text('Cek Kolesterol'),
                     ),
                   ),
-                  icon: const Icon(Icons.list_alt_rounded),
-                  label: const Text('Cek Kolesterol'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const FullCheck(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  const SizedBox(
+                    height: 10,
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+                  SizedBox(
+                    width: 300,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const FullCheck(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.deepPurple,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.fact_check_rounded),
+                      label: const Text('Cek Lengkap'),
                     ),
                   ),
-                  icon: const Icon(Icons.list_alt_rounded),
-                  label: const Text('Cek Lengkap'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

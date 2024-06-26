@@ -43,51 +43,62 @@ class _ServiceState extends State<Service> {
             height: 20,
           ),
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const Consultation(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const Consultation(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.deepPurple,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.chat_rounded),
+                      label: const Text('Konsultasi'),
                     ),
                   ),
-                  icon: const Icon(Icons.chat_rounded),
-                  label: const Text('Konsultasi'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton.icon(
-                  onPressed: () => PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const HomeCare(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  const SizedBox(
+                    height: 10,
                   ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                    textStyle: const TextStyle(
-                      fontSize: 24,
+                  SizedBox(
+                    width: 200,
+                    child: TextButton.icon(
+                      onPressed: () => PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const HomeCare(),
+                        withNavBar: true,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.pinkAccent,
+                        textStyle: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      icon: const Icon(Icons.home_rounded),
+                      label: const Text('Home Care'),
                     ),
                   ),
-                  icon: const Icon(Icons.home_rounded),
-                  label: const Text('Home Care'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

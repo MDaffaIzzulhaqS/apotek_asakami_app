@@ -52,72 +52,74 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
           title: const Center(child: Text("Pembelian")),
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 300),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama Barang',
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nama Barang',
+                    ),
                   ),
-                ),
-                TextField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Jumlah Barang',
+                  TextField(
+                    controller: _quantityController,
+                    decoration: const InputDecoration(
+                      labelText: 'Jumlah Barang',
+                    ),
                   ),
-                ),
-                TextField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  controller: _priceController,
-                  decoration: const InputDecoration(
-                    labelText: 'Harga Barang',
+                  TextField(
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    controller: _priceController,
+                    decoration: const InputDecoration(
+                      labelText: 'Harga Barang',
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    child: const Text('Beli Barang'),
-                    onPressed: () async {
-                      User? user = FirebaseAuth.instance.currentUser;
-                      final String name = _nameController.text;
-                      final String quantity = _quantityController.text;
-                      final double? price =
-                          double.tryParse(_priceController.text);
-                      if (price != null && user != null) {
-                        // Persist a new product to Firestore
-                        await _checkouts.add({
-                          'uid': user.uid,
-                          "name": name,
-                          "totalQuantity": quantity,
-                          "totalPrice": price,
-                          'timestamp': FieldValue.serverTimestamp(),
-                        });
-                        // Clear the text fields
-                        _nameController.text = '';
-                        _quantityController.text = '';
-                        _priceController.text = '';
-                        // Hide the bottom sheet
-                        Future.delayed(
-                          const Duration(seconds: 1),
-                          () {
-                            Navigator.of(context).pop();
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const Checkout(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
-                        );
-                      }
-                    },
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
+                  Center(
+                    child: ElevatedButton(
+                      child: const Text('Beli Barang'),
+                      onPressed: () async {
+                        User? user = FirebaseAuth.instance.currentUser;
+                        final String name = _nameController.text;
+                        final String quantity = _quantityController.text;
+                        final double? price =
+                            double.tryParse(_priceController.text);
+                        if (price != null && user != null) {
+                          // Persist a new product to Firestore
+                          await _checkouts.add({
+                            'uid': user.uid,
+                            "name": name,
+                            "totalQuantity": quantity,
+                            "totalPrice": price,
+                            'timestamp': FieldValue.serverTimestamp(),
+                          });
+                          // Clear the text fields
+                          _nameController.text = '';
+                          _quantityController.text = '';
+                          _priceController.text = '';
+                          // Hide the bottom sheet
+                          Future.delayed(
+                            const Duration(seconds: 1),
+                            () {
+                              Navigator.of(context).pop();
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const Checkout(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -153,7 +155,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
             var product = snapshot.data;
             var totalHarga = product?['price'] * _counter;
             return Center(
-              child: Column(
+              child: Stack(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
