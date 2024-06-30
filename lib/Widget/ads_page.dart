@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AdsPage extends StatefulWidget {
   const AdsPage({super.key});
@@ -29,13 +30,31 @@ class _AdsPageState extends State<AdsPage> {
         controller: adsController,
         children: [
           Container(
-            color: Colors.red,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/poster_1.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           Container(
-            color: Colors.green,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/poster_2.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           Container(
-            color: Colors.blue,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/poster_3.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ],
       ),

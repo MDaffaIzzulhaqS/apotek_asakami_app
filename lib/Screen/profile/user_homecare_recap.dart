@@ -1,69 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const UserHomeCareRecap());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class UserHomeCareRecap extends StatefulWidget {
+  const UserHomeCareRecap({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<UserHomeCareRecap> createState() => _UserHomeCareRecapState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
-  final TextEditingController _statusController = TextEditingController();
+class _UserHomeCareRecapState extends State<UserHomeCareRecap> {
+  final CollectionReference _transactionHomecare =
+      FirebaseFirestore.instance.collection('transaction_homecare');
 
-  Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
-    if (documentSnapshot != null) {
-      _statusController.text = documentSnapshot['status'];
+  Stream<QuerySnapshot> getUserHomecareData() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return _transactionHomecare.where('uid', isEqualTo: user.uid).snapshots();
+    } else {
+      return const Stream.empty();
     }
-    await showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            top: 20,
-            left: 20,
-            right: 20,
-            // prevent the soft keyboard from covering text fields
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: _statusController,
-                decoration:
-                    const InputDecoration(labelText: 'Status Pembayaran'),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                child: const Text('Update'),
-                onPressed: () async {
-                  final String status = _statusController.text;
-                  await _transaction.doc(documentSnapshot!.id).update({
-                    "status": status,
-                  });
-                  // Clear the text fields
-                  _statusController.text = '';
-                  // Hide the bottom sheet
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -71,7 +32,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Riwayat Cek Kesehatan Homecare",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -83,7 +44,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: getUserHomecareData(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -100,29 +61,12 @@ class _TransactionRecapState extends State<TransactionRecap> {
                     Card(
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
-                        title: Row(
-                          children: [
-                            const Text(
-                              "Rekap Pembayaran",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 160,
-                            ),
-                            Row(
-                              children: [
-                                // Press this button to edit a single product
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () =>
-                                      updateStatus(documentSnapshot),
-                                ),
-                              ],
-                            ),
-                          ],
+                        title: const Text(
+                          "Riwayat Cek Kesehatan Homecare",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -154,24 +98,15 @@ class _TransactionRecapState extends State<TransactionRecap> {
                             ),
                             Row(
                               children: [
-                                const Text("Total Pembelian: "),
+                                const Text("Layanan: "),
                                 Text(
-                                  documentSnapshot['price'].toString(),
+                                  documentSnapshot['service_type'].toString(),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Text("Metode Pembelian: "),
-                                Text(
-                                  documentSnapshot['purchase_method']
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Waktu Pembelian: "),
+                                const Text("Waktu Konfirmasi: "),
                                 Text(
                                   formattedDate.toString(),
                                 ),

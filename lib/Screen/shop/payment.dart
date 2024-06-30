@@ -416,7 +416,7 @@ class PaymentState extends State<Payment> {
                       if (_type == 2)
                         InkWell(
                           onTap: () {
-                            _transactionItem(snapshot as DocumentSnapshot<Object?>?);
+                            _transactionItem();
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(

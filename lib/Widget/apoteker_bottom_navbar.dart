@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Screen/apoteker/apoteker_profile.dart';
 import 'package:apotek_asakami_app/Screen/apoteker/checkout_rekap.dart';
+import 'package:apotek_asakami_app/Screen/apoteker/homecare_recap.dart';
 import 'package:apotek_asakami_app/Screen/apoteker/transaction_recap.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -15,6 +16,7 @@ class ApotekerBottomNavBar extends StatelessWidget {
       return [
         const TransactionRecap(),
         const CheckoutRecap(),
+        const HomeCareRecap(),
         const ApotekerProfile(),
       ];
     }
@@ -30,6 +32,12 @@ class ApotekerBottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.list_alt_rounded),
           title: ("Rekap Pembelian"),
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.list_alt_rounded),
+          title: ("Rekap Cek Homecare"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),

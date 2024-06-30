@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:excel/excel.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class ProductData extends StatefulWidget {
@@ -196,6 +198,41 @@ class ProductDataState extends State<ProductData> {
     );
   }
 
+  // Future<void> _pickFileAndUpload() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['xlsx'],
+  //   );
+
+  //   if (result != null) {
+  //     var file = result.files.first.bytes;
+  //     var excel = Excel.decodeBytes(file!);
+
+  //     for (var table in excel.tables.keys) {
+  //       if (excel.tables[table] != null) {
+  //         for (var row in excel.tables[table]!.rows) {
+  //           if (row.isNotEmpty) {
+  //             // Asumsikan baris pertama adalah header dan mulai dari baris kedua
+  //             Map<String, dynamic> data = {
+  //               "name": row[0]?.value ?? '',
+  //               "category": row[1]?.value ?? '',
+  //               "description": row[2]?.value ?? '',
+  //               "quantity": row[3]?.value ?? '',
+  //               "price": row[4]?.value ?? '',
+  //               // tambahkan field lainnya sesuai dengan kolom di Excel
+  //             };
+
+  //             await _productss.add(data);
+  //           }
+  //         }
+  //       }
+  //     }
+  //     const SnackBar(
+  //       content: Text('Berhasil Mengupload Data Produk'),
+  //     );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,6 +358,13 @@ class ProductDataState extends State<ProductData> {
               onPressed: () => _filter(),
               child: const Icon(Icons.search),
             ),
+            const SizedBox(
+              width: 10,
+            ),
+            // FloatingActionButton(
+            //   onPressed: () => _pickFileAndUpload(),
+            //   child: const Icon(Icons.file_upload_rounded),
+            // ),
           ],
         ),
       ),

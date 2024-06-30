@@ -1,4 +1,5 @@
 import 'package:apotek_asakami_app/Screen/profile/user_checkout_recap.dart';
+import 'package:apotek_asakami_app/Screen/profile/user_homecare_recap.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_payment_recap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -111,143 +112,176 @@ class _ProfileState extends State<Profile> {
             return const Center(child: Text('Data Pengguna Tidak Ditemukan'));
           } else {
             var userData = snapshot.data!.data() as Map<String, dynamic>;
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const CircleAvatar(
-                    radius: 70,
-                    backgroundImage: AssetImage(
-                      'assets/images/default_profile.png',
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 30,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  itemProfile(
-                    'Nama',
-                    userData['username'],
-                    Icons.person_rounded,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  itemProfile(
-                    'Email',
-                    userData['email'],
-                    Icons.email_rounded,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  itemProfile(
-                    'No Handphone',
-                    userData['phone'],
-                    Icons.phone_rounded,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  itemProfile(
-                    'Alamat',
-                    userData['address'],
-                    Icons.home_rounded,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    const CircleAvatar(
+                      radius: 70,
+                      backgroundImage: AssetImage(
+                        'assets/images/default_profile.png',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    itemProfile(
+                      'Nama',
+                      userData['username'],
+                      Icons.person_rounded,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    itemProfile(
+                      'Email',
+                      userData['email'],
+                      Icons.email_rounded,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    itemProfile(
+                      'No Handphone',
+                      userData['phone'],
+                      Icons.phone_rounded,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    itemProfile(
+                      'Alamat',
+                      userData['address'],
+                      Icons.home_rounded,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.deepPurple[400],
+                              minimumSize: const Size.fromHeight(40),
                             ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.deepPurple[400],
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            _updateProfile(snapshot.data);
-                          },
-                          child: const Text(
-                            'Ubah Profil',
-                            style: TextStyle(
-                              fontSize: 16,
+                            onPressed: () {
+                              _updateProfile(snapshot.data);
+                            },
+                            child: const Text(
+                              'Ubah Profil',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.pink,
+                              minimumSize: const Size.fromHeight(40),
                             ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.pink,
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const UserCheckoutRecap(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: const Text(
-                            'Riwayat Pembelian',
-                            style: TextStyle(
-                              fontSize: 16,
+                            onPressed: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const UserCheckoutRecap(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Text(
+                              'Riwayat Pembelian',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.pink,
+                              minimumSize: const Size.fromHeight(40),
                             ),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.pink,
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          onPressed: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const UserPaymentRecap(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: const Text(
-                            'Riwayat Pembayaran',
-                            style: TextStyle(
-                              fontSize: 16,
+                            onPressed: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const UserPaymentRecap(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Text(
+                              'Riwayat Pembayaran',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.pink,
+                              minimumSize: const Size.fromHeight(40),
+                            ),
+                            onPressed: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const UserHomeCareRecap(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Text(
+                              'Riwayat Cek Kesehatan Homecare',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           }

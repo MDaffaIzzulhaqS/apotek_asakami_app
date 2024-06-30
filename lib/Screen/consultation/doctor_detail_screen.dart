@@ -12,9 +12,13 @@ class DoctorDetailScreen extends StatefulWidget {
 }
 
 class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
-
   Future<void> _bookingDoctor() async {
-    const url = "https://s.id/whatsapp_apoteker";
+    final phoneNumber = widget.doctor.phoneNumber;
+    const message =
+        'Halo. Apakah saya dapat melakukan konsultasi dengan dokter hari ini?';
+
+    final url =
+        'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
     launchUrl(
       Uri.parse(url),
       mode: LaunchMode.externalApplication,

@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const HomeCareRecap());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class HomeCareRecap extends StatefulWidget {
+  const HomeCareRecap({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<HomeCareRecap> createState() => _HomeCareRecapState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
+class _HomeCareRecapState extends State<HomeCareRecap> {
+  final CollectionReference _transactionHomecare =
+      FirebaseFirestore.instance.collection('transaction_homecare');
   final TextEditingController _statusController = TextEditingController();
 
   Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
@@ -50,7 +50,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
                 child: const Text('Update'),
                 onPressed: () async {
                   final String status = _statusController.text;
-                  await _transaction.doc(documentSnapshot!.id).update({
+                  await _transactionHomecare.doc(documentSnapshot!.id).update({
                     "status": status,
                   });
                   // Clear the text fields
@@ -71,7 +71,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Rekap Cek Kesehatan Homecare",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: _transactionHomecare.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -103,14 +103,14 @@ class _TransactionRecapState extends State<TransactionRecap> {
                         title: Row(
                           children: [
                             const Text(
-                              "Rekap Pembayaran",
+                              "Rekap Cek Kesehatan Homecare",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(
-                              width: 160,
+                              width: 60,
                             ),
                             Row(
                               children: [
@@ -154,24 +154,15 @@ class _TransactionRecapState extends State<TransactionRecap> {
                             ),
                             Row(
                               children: [
-                                const Text("Total Pembelian: "),
+                                const Text("Layanan: "),
                                 Text(
-                                  documentSnapshot['price'].toString(),
+                                  documentSnapshot['service_type'].toString(),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Text("Metode Pembelian: "),
-                                Text(
-                                  documentSnapshot['purchase_method']
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Waktu Pembelian: "),
+                                const Text("Waktu Konfirmasi: "),
                                 Text(
                                   formattedDate.toString(),
                                 ),

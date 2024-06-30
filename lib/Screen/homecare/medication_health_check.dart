@@ -1,4 +1,8 @@
+import 'package:apotek_asakami_app/Screen/homecare/homecare.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 void main() {
   runApp(const HomeCareHealthCheck());
@@ -12,118 +16,116 @@ class HomeCareHealthCheck extends StatefulWidget {
 }
 
 class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
-  final _systolicController = TextEditingController();
-  final _diastolicController = TextEditingController();
-  final TextEditingController _controller = TextEditingController();
-  final TextEditingController _ldlController = TextEditingController();
-  final TextEditingController _hdlController = TextEditingController();
-  final TextEditingController _triglyceridesController =
-      TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final TextEditingController _heightController = TextEditingController();
-
-  double? _uricAcidResult;
-  String? _condition;
-  String _bloodpressureresult = '';
-  String _glucoseresult = '';
-  String _cholesterolresult = '';
-
-  void _calculateBloodPressure() {
-    final int systolic = int.tryParse(_systolicController.text) ?? 0;
-    final int diastolic = int.tryParse(_diastolicController.text) ?? 0;
-
-    String category;
-
-    if (systolic < 120 && diastolic < 80) {
-      category = 'Normal';
-    } else if (systolic <= 129 && diastolic < 80) {
-      category = 'Tinggi';
-    } else if (systolic <= 139 || diastolic <= 89) {
-      category = 'Hipertensi Stadium 1';
-    } else if (systolic >= 140 || diastolic >= 90) {
-      category = 'Hipertensi Stadium 2';
-    } else if (systolic >= 180 || diastolic >= 120) {
-      category = 'Hipertensi Kritis';
-    } else {
-      category = 'Invalid Input';
-    }
-
-    setState(() {
-      _bloodpressureresult = 'Kategori: $category';
-    });
-  }
-
-  void _calculateResult() {
-    final double glucose = double.tryParse(_controller.text) ?? 0.0;
-    setState(() {
-      _glucoseresult = _categorizeGlucose(glucose);
-    });
-  }
-
-  String _categorizeGlucose(double glucose) {
-    if (glucose < 70) {
-      return 'Gula Darah Rendah';
-    } else if (glucose >= 70 && glucose <= 99) {
-      return 'Normal';
-    } else if (glucose >= 100 && glucose <= 125) {
-      return 'Pradiabetes';
-    } else if (glucose >= 126) {
-      return 'Diabetes';
-    } else {
-      return 'Invalid Input';
-    }
-  }
-
-  void _calculateCholesterol() {
-    final double ldl = double.tryParse(_ldlController.text) ?? 0.0;
-    final double hdl = double.tryParse(_hdlController.text) ?? 0.0;
-    final double triglycerides =
-        double.tryParse(_triglyceridesController.text) ?? 0.0;
-
-    // Total Cholesterol = LDL + HDL + (Triglycerides / 5)
-    final double totalCholesterol = ldl + hdl + (triglycerides / 5);
-
-    String condition;
-    if (totalCholesterol < 200) {
-      condition = 'Normal';
-    } else if (totalCholesterol >= 200 && totalCholesterol <= 239) {
-      condition = 'Batas Tinggi';
-    } else {
-      condition = 'Tinggi';
-    }
-
-    setState(() {
-      _cholesterolresult =
-          'Total Kolesterol: $totalCholesterol mg/dL\nKondisi: $condition';
-    });
-  }
-
-  void _calculateUricAcid() {
-    if (_formKey.currentState!.validate()) {
-      double age = double.parse(_ageController.text);
-      double weight = double.parse(_weightController.text);
-      double height = double.parse(_heightController.text);
-
-      // Example calculation (this is a mock formula for demonstration purposes)
-      double uricAcid = (age + weight + height) / 3;
-
-      setState(() {
-        _uricAcidResult = uricAcid;
-        if (uricAcid < 4.0) {
-          _condition = "Rendah";
-        } else if (uricAcid >= 4.0 && uricAcid <= 8.5) {
-          _condition = "Normal";
-        } else {
-          _condition = "Tinggi";
-        }
+  int _type = 1;
+  void _handleRadio(Object? e) => setState(() {
+        _type = e as int;
       });
-    }
+
+  String cekTekananDarah = "Cek Tekanan Darah";
+  String cekAsamUrat = "Cek Asam Urat";
+  String cekGulaDarah = "Cek Gula Darah";
+  String cekKolesterol = "Cek Kolesterol";
+
+  final CollectionReference _transactionHomecare =
+      FirebaseFirestore.instance.collection('transaction_homecare');
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _serviceController = TextEditingController();
+
+  Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Center(child: Text("Pembayaran")),
+          insetPadding: EdgeInsets.zero,
+          content: SizedBox(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 430),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nama',
+                    ),
+                  ),
+                  TextField(
+                    controller: _addressController,
+                    decoration: const InputDecoration(
+                      labelText: 'Alamat',
+                    ),
+                  ),
+                  TextField(
+                    controller: _phoneNumberController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nomor HP',
+                    ),
+                  ),
+                  TextField(
+                    controller: _serviceController,
+                    decoration: const InputDecoration(
+                      labelText: 'Jenis Layanan',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      child: const Text('Konfirmasi'),
+                      onPressed: () async {
+                        User? user = FirebaseAuth.instance.currentUser;
+                        final String name = _nameController.text;
+                        final String address = _addressController.text;
+                        final String phone = _phoneNumberController.text;
+                        final String service = _serviceController.text;
+                        const String status = "Belum Dilayani";
+                        if (user != null) {
+                          // Persist a new product to Firestore
+                          await _transactionHomecare.add({
+                            'uid': user.uid,
+                            "name": name,
+                            "address": address,
+                            "phone": phone,
+                            "service_type": service,
+                            "status": status,
+                            "timestamp": FieldValue.serverTimestamp()
+                          });
+                          // Clear the text fields
+                          _nameController.text = '';
+                          _addressController.text = '';
+                          _phoneNumberController.text = '';
+                          _serviceController.text = '';
+                          // Hide the bottom sheet
+                          Future.delayed(const Duration(seconds: 1), () {
+                            Navigator.of(context).pop();
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const HomeCare(),
+                              withNavBar: true,
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
+                            );
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -140,284 +142,281 @@ class _HomeCareHealthCheckState extends State<HomeCareHealthCheck> {
       ),
       body: SingleChildScrollView(
         child: Card(
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 50,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Cek Tekanan Darah",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                const Text(
+                  "Pilih Cek Kesehatan Yang Diinginkan",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: size.width,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: _type == 1
+                        ? Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )
+                        : Border.all(
+                            width: 0.3,
+                            color: Colors.grey,
                           ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Radio(
+                                value: 1,
+                                groupValue: _type,
+                                onChanged: _handleRadio,
+                                activeColor: Colors.black,
+                              ),
+                              Text(
+                                cekTekananDarah,
+                                style: _type == 1
+                                    ? const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      )
+                                    : const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.monitor_heart_rounded),
                         ],
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black, // Warna garis batas
-                        width: 2.0, // Ketebalan garis batas
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: size.width,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: _type == 2
+                        ? Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )
+                        : Border.all(
+                            width: 0.3,
+                            color: Colors.grey,
+                          ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Radio(
+                                value: 2,
+                                groupValue: _type,
+                                onChanged: _handleRadio,
+                                activeColor: Colors.black,
+                              ),
+                              Text(
+                                cekGulaDarah,
+                                style: _type == 2
+                                    ? const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      )
+                                    : const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.local_pharmacy_rounded),
+                        ],
                       ),
                     ),
-                    child: bloodPressure(),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Cek Gula Darah",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: size.width,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: _type == 3
+                        ? Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )
+                        : Border.all(
+                            width: 0.3,
+                            color: Colors.grey,
+                          ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 20,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black, // Warna garis batas
-                    width: 2.0, // Ketebalan garis batas
-                  ),
-                ),
-                child: bloodSugar(),
-              ),
-              const SizedBox(
-                height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Cek Asam Urat",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Radio(
+                                value: 3,
+                                groupValue: _type,
+                                onChanged: _handleRadio,
+                                activeColor: Colors.black,
+                              ),
+                              Text(
+                                cekAsamUrat,
+                                style: _type == 3
+                                    ? const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      )
+                                    : const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.health_and_safety_rounded),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black, // Warna garis batas
-                    width: 2.0, // Ketebalan garis batas
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-                child: uricAcid(),
-              ),
-              const SizedBox(
-                height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Cek Kolesterol",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                Container(
+                  width: size.width,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: _type == 4
+                        ? Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )
+                        : Border.all(
+                            width: 0.3,
+                            color: Colors.grey,
+                          ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 20,
                       ),
-                    ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Radio(
+                                value: 4,
+                                groupValue: _type,
+                                onChanged: _handleRadio,
+                                activeColor: Colors.black,
+                              ),
+                              Text(
+                                cekKolesterol,
+                                style: _type == 4
+                                    ? const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      )
+                                    : const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.local_hospital_rounded),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black, // Warna garis batas
-                    width: 2.0, // Ketebalan garis batas
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-                child: cholesterol(),
-              ),
-            ],
+                InkWell(
+                  onTap: () {
+                    _transactionItem();
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Konfirmasi Cek Kesehatan",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
-
-  Padding cholesterol() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _ldlController,
-            decoration: const InputDecoration(labelText: 'LDL (mg/dL)'),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: _hdlController,
-            decoration: const InputDecoration(labelText: 'HDL (mg/dL)'),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: _triglyceridesController,
-            decoration:
-                const InputDecoration(labelText: 'Trigliserida (mg/dL)'),
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _calculateCholesterol,
-            child: const Text('Hitung Kolesterol'),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            _cholesterolresult,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding uricAcid() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: _ageController,
-              decoration: const InputDecoration(labelText: 'Umur'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Masukkan umur';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _weightController,
-              decoration: const InputDecoration(labelText: 'Berat Badan (kg)'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Masukkan berat badan';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _heightController,
-              decoration: const InputDecoration(labelText: 'Tinggi Badan (cm)'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Masukkan tinggi badan';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _calculateUricAcid,
-              child: const Text('Hitung Asam Urat'),
-            ),
-            const SizedBox(height: 20),
-            if (_uricAcidResult != null)
-              Column(
-                children: [
-                  Text('Asam Urat: ${_uricAcidResult!.toStringAsFixed(2)}'),
-                  Text('Kondisi: $_condition'),
-                ],
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding bloodSugar() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Masukkan kadar gula darah Anda (mg/dL)',
-            ),
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _calculateResult,
-            child: const Text('Check'),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _glucoseresult,
-            style: const TextStyle(fontSize: 24),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding bloodPressure() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-      ),
-      child: Column(
-        children: [
-          TextField(
-            controller: _systolicController,
-            decoration: const InputDecoration(
-              labelText: 'Sistolik (mmHg)',
-            ),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: _diastolicController,
-            decoration: const InputDecoration(
-              labelText: 'Diastolik (mmHg)',
-            ),
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _calculateBloodPressure,
-            child: const Text('Hitung'),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            _bloodpressureresult,
-            style: const TextStyle(fontSize: 20),
-          ),
-        ],
       ),
     );
   }

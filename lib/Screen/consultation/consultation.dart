@@ -1,7 +1,6 @@
 import 'package:apotek_asakami_app/Screen/consultation/doctor_detail_screen.dart';
 import 'package:apotek_asakami_app/Support/models/consultation_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Consultation extends StatefulWidget {
   const Consultation({super.key});
@@ -11,25 +10,6 @@ class Consultation extends StatefulWidget {
 }
 
 class _ConsultationState extends State<Consultation> {
-  final List<Doctor> doctors = [
-    Doctor(
-      name: 'Dr. Andi Wijaya',
-      imageUrl: 'assets/images/default_profile.png',
-      specialty: 'Spesialis Anak',
-      schedule: 'Senin - Jumat: 09:00 - 15:00',
-      description:
-          'Dr. Andi Wijaya adalah dokter spesialis anak dengan pengalaman lebih dari 10 tahun.',
-    ),
-    Doctor(
-      name: 'Dr. Budi Santoso',
-      imageUrl: 'assets/images/default_profile.png',
-      specialty: 'Spesialis Bedah',
-      schedule: 'Selasa, Kamis: 10:00 - 14:00',
-      description:
-          'Dr. Budi Santoso adalah dokter spesialis bedah dengan keahlian dalam operasi minimal invasif.',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeCareConsulting extends StatefulWidget {
-  final Doctor doctor;
-  const HomeCareConsulting({super.key, required this.doctor});
+  final Doctor homecareDoctors;
+  const HomeCareConsulting({super.key, required this.homecareDoctors});
 
   @override
   State<HomeCareConsulting> createState() => _HomeCareConsultingState();
@@ -12,7 +12,12 @@ class HomeCareConsulting extends StatefulWidget {
 
 class _HomeCareConsultingState extends State<HomeCareConsulting> {
   Future<void> _bookingHomecareDoctor() async {
-    const url = "https://s.id/whatsapp_apoteker";
+    final phoneNumber = widget.homecareDoctors.phoneNumber;
+    const message =
+        'Halo. Apakah saya dapat melakukan konsultasi homecare hari ini?';
+
+    final url =
+        'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
     launchUrl(
       Uri.parse(url),
       mode: LaunchMode.externalApplication,
@@ -46,7 +51,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              widget.doctor.imageUrl,
+              widget.homecareDoctors.imageUrl,
               width: double.infinity,
               height: 200,
               fit: BoxFit.cover,
@@ -55,7 +60,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
               height: 16,
             ),
             Text(
-              'Nama: ${widget.doctor.name}',
+              'Nama: ${widget.homecareDoctors.name}',
               style: const TextStyle(
                 fontSize: 18,
               ),
@@ -64,7 +69,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
               height: 10,
             ),
             Text(
-              'Spesialis: ${widget.doctor.specialty}',
+              'Spesialis: ${widget.homecareDoctors.specialty}',
               style: const TextStyle(
                 fontSize: 18,
               ),
@@ -73,7 +78,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
               height: 10,
             ),
             Text(
-              'Jadwal: ${widget.doctor.schedule}',
+              'Jadwal: ${widget.homecareDoctors.schedule}',
               style: const TextStyle(
                 fontSize: 18,
               ),
@@ -89,7 +94,7 @@ class _HomeCareConsultingState extends State<HomeCareConsulting> {
             ),
             const SizedBox(height: 5),
             Text(
-              widget.doctor.description,
+              widget.homecareDoctors.description,
               style: const TextStyle(
                 fontSize: 16,
               ),
