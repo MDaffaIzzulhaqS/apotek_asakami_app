@@ -51,7 +51,7 @@ class _MainMenuState extends State<MainMenu> {
                       child: AlertDialog(
                         title: const Text("Konfirmasi"),
                         content: const Text(
-                            "Apakah Anda Ingin Keluar Dari Aplikasi?"),
+                            "Apakah Anda Ingin Logout Dari Aplikasi?"),
                         actions: [
                           TextButton(
                             onPressed: () {

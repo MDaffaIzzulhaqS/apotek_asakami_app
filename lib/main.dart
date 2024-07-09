@@ -1,14 +1,22 @@
+import 'dart:io';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:apotek_asakami_app/Screen/onboarding.dart';
-import 'package:apotek_asakami_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+          options: const FirebaseOptions(
+            apiKey: "AIzaSyAWLQMxB2iqN6gWrnpTm0n6fxKy-xmTyp4",
+            appId: "1:408216932264:android:1bc0846c36edec5b9b979d",
+            messagingSenderId: "408216932264",
+            projectId: "apotekasakamiapp",
+          ),
+        )
+      : await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

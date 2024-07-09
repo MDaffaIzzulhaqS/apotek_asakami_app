@@ -18,6 +18,10 @@ class _TransactionRecapState extends State<TransactionRecap> {
       FirebaseFirestore.instance.collection('transaction');
   final TextEditingController _statusController = TextEditingController();
 
+  void _updateData(String newValue, [DocumentSnapshot? documentSnapshot]) {
+    _transaction.doc(documentSnapshot!.id).update({'status': newValue});
+  }
+
   Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
       _statusController.text = documentSnapshot['status'];
@@ -36,28 +40,44 @@ class _TransactionRecapState extends State<TransactionRecap> {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextField(
-                controller: _statusController,
-                decoration:
-                    const InputDecoration(labelText: 'Status Pembayaran'),
+              const Text(
+                "Status Pembayaran",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                child: const Text('Update'),
-                onPressed: () async {
-                  final String status = _statusController.text;
-                  await _transaction.doc(documentSnapshot!.id).update({
-                    "status": status,
-                  });
-                  // Clear the text fields
-                  _statusController.text = '';
-                  // Hide the bottom sheet
-                  Navigator.of(context).pop();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _updateData(
+                        'Belum Bayar',
+                        documentSnapshot,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Belum Bayar'),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _updateData(
+                        'Sudah Bayar',
+                        documentSnapshot,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Sudah Bayar'),
+                  ),
+                ],
               ),
             ],
           ),

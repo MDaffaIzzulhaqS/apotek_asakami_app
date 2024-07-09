@@ -319,9 +319,6 @@ class _CheckoutState extends State<Checkout> {
                                   _deleteCheckout(product.id);
                                 },
                               ),
-                              const SizedBox(
-                                height: 80,
-                              ),
                             ],
                           ),
                         );
