@@ -62,7 +62,12 @@ class _TransactionRecapState extends State<TransactionRecap> {
                       );
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Belum Bayar'),
+                    child: const Text(
+                      'Belum Bayar',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 20,
@@ -75,7 +80,12 @@ class _TransactionRecapState extends State<TransactionRecap> {
                       );
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Sudah Bayar'),
+                    child: const Text(
+                      'Sudah Bayar',
+                      style: TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
                   ),
                 ],
               ),

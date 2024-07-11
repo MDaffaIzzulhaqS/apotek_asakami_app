@@ -62,7 +62,12 @@ class _HomeCareRecapState extends State<HomeCareRecap> {
                       );
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Belum Dilayani'),
+                    child: const Text(
+                      'Belum Dilayani',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 20,
@@ -75,7 +80,12 @@ class _HomeCareRecapState extends State<HomeCareRecap> {
                       );
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Sudah Dilayani'),
+                    child: const Text(
+                      'Sudah Dilayani',
+                      style: TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
                   ),
                 ],
               ),

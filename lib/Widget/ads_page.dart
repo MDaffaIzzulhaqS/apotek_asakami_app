@@ -30,27 +30,24 @@ class _AdsPageState extends State<AdsPage> {
         controller: adsController,
         children: [
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage('assets/images/poster_1.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage('assets/images/poster_2.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage('assets/images/poster_3.png'),
                 fit: BoxFit.cover,
               ),

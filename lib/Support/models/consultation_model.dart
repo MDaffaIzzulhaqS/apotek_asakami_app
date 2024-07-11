@@ -24,37 +24,64 @@ final List<Doctor> doctors = [
     schedule: 'Senin - Jumat: 09:00 - 15:00',
     phoneNumber: '+6281227086943',
     description:
-        'Dr. Andi Wijaya adalah dokter spesialis anak dengan pengalaman lebih dari 10 tahun.',
+        'Dr. Andi Wijaya adalah dokter spesialis anak dengan keahlian konsultasi seputar anak.',
   ),
   Doctor(
     name: 'Dr. Budi Santoso',
     imageUrl: 'assets/images/default_profile.png',
-    specialty: 'Spesialis Bedah',
+    specialty: 'Spesialis Mata',
     schedule: 'Selasa, Kamis: 10:00 - 14:00',
     phoneNumber: '+6281227086943',
     description:
-        'Dr. Budi Santoso adalah dokter spesialis bedah dengan keahlian dalam operasi minimal invasif.',
+        'Dr. Budi Santoso adalah dokter spesialis mata dengan keahlian konsultasi seputar mata.',
+  ),
+  Doctor(
+    name: 'Dr. Rini Puspitasari',
+    imageUrl: 'assets/images/default_profile.png',
+    specialty: 'Spesialis Bedah',
+    schedule: 'Senin, Sabtu: 11:00 - 14:00',
+    phoneNumber: '+6281227086943',
+    description:
+        'Dr. Rini Puspitasari adalah dokter spesialis bedah dengan keahlian konsultasi seputar gigi.',
+  ),
+  Doctor(
+    name: 'Dr. Taryanto',
+    imageUrl: 'assets/images/default_profile.png',
+    specialty: 'Spesialis Bedah',
+    schedule: 'Selasa, Sabtu: 09:00 - 14:00',
+    phoneNumber: '+6281227086943',
+    description:
+        'Dr. Taryanto adalah dokter spesialis bedah dengan keahlian konsultasi seputar tht.',
+  ),
+  Doctor(
+    name: 'Dr. Yutskhina Musaarah',
+    imageUrl: 'assets/images/default_profile.png',
+    specialty: 'Spesialis Psikiater',
+    schedule: 'Selasa, Jumat: 10:00 - 14:00',
+    phoneNumber: '+6281227086943',
+    description:
+        'Dr. Yutskhina Musaarah adalah dokter spesialis bedah dengan keahlian konsultasi seputar psikiater',
   ),
 ];
 
 
 final List<Doctor> homecareDoctors = [
   Doctor(
-    name: 'Dr. Andi Wijaya',
+    name: 'Dr. Yutskhina Musaarah',
     imageUrl: 'assets/images/default_profile.png',
-    specialty: 'Spesialis Anak',
+    specialty: 'Spesialis Homecare 1',
     schedule: 'Senin - Jumat: 09:00 - 15:00',
     phoneNumber: '+6281227086943',
     description:
-        'Dr. Andi Wijaya adalah dokter spesialis anak dengan pengalaman lebih dari 10 tahun.',
+        'Dr. Yutskhina Musaarah adalah dokter spesialis homecare dengan pengalaman lebih dari 10 tahun.',
   ),
   Doctor(
-    name: 'Dr. Budi Santoso',
+    name: 'Dr. Ika Maharani',
     imageUrl: 'assets/images/default_profile.png',
-    specialty: 'Spesialis Bedah',
+    specialty: 'Spesialis Homecare 2',
     schedule: 'Selasa, Kamis: 10:00 - 14:00',
     phoneNumber: '+6281227086943',
     description:
-        'Dr. Budi Santoso adalah dokter spesialis bedah dengan keahlian dalam operasi minimal invasif.',
+        'Dr. Ika Maharani adalah dokter spesialis homecare dengan keahlian dalam konsultasi.',
   ),
 ];
