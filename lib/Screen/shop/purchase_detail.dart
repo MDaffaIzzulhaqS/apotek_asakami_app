@@ -45,11 +45,16 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
   final TextEditingController _priceController = TextEditingController();
 
   Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _nameController.text = documentSnapshot['name'];
+      _quantityController.text = documentSnapshot['quantity'];
+      _priceController.text = documentSnapshot['price'];
+    }
     await showDialog(
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title: const Center(child: Text("Pembelian")),
+          title: const Center(child: Text("Konfirmasi Pembelian")),
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 300),
             child: SingleChildScrollView(

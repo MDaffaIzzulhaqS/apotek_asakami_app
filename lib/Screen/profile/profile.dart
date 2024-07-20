@@ -1,3 +1,4 @@
+import 'package:apotek_asakami_app/Screen/profile/complaint.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_checkout_recap.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_homecare_recap.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_payment_recap.dart';
@@ -272,6 +273,37 @@ class _ProfileState extends State<Profile> {
                             },
                             child: const Text(
                               'Riwayat Cek Kesehatan Homecare',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.purpleAccent,
+                              minimumSize: const Size.fromHeight(40),
+                            ),
+                            onPressed: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: UserComplaint(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Text(
+                              'Lakukan Komplain',
                               style: TextStyle(
                                 fontSize: 16,
                               ),

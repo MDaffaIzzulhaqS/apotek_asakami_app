@@ -25,11 +25,17 @@ class PaymentState extends State<Payment> {
       TextEditingController();
 
   Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _nameController.text = documentSnapshot['name'];
+      _addressController.text = documentSnapshot['address'];
+      _phoneNumberController.text = documentSnapshot['phoneNumber'];
+      _priceController.text = documentSnapshot['price'];
+    }
     await showDialog(
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title: const Center(child: Text("Pembayaran")),
+          title: const Center(child: Text("Konfirmasi Pembayaran")),
           insetPadding: EdgeInsets.zero,
           content: SizedBox(
             child: ConstrainedBox(
@@ -144,7 +150,7 @@ class PaymentState extends State<Payment> {
     return totalPembelian;
   }
 
-  String datangKeLokasi = "Datang Ke Lokasi";
+  String bayarSendiri = "Bayar Sendiri";
   String cashOnDelivery = "Cash On Delivery";
 
   int _type = 1;
@@ -244,7 +250,7 @@ class PaymentState extends State<Payment> {
                                       activeColor: Colors.black,
                                     ),
                                     Text(
-                                      datangKeLokasi,
+                                      bayarSendiri,
                                       style: _type == 1
                                           ? const TextStyle(
                                               fontSize: 16,
@@ -446,7 +452,7 @@ class PaymentState extends State<Payment> {
                       else
                         InkWell(
                           onTap: () {
-                            _transactionItem();
+                            // _transactionItem();
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
@@ -462,7 +468,7 @@ class PaymentState extends State<Payment> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Datang Ke Lokasi",
+                                  "Bayar Sendiri",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
