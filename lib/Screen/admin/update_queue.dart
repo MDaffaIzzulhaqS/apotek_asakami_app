@@ -3,23 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const UpdateQueue());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class UpdateQueue extends StatefulWidget {
+  const UpdateQueue({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<UpdateQueue> createState() => _UpdateQueueState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
+class _UpdateQueueState extends State<UpdateQueue> {
+  final CollectionReference _queues =
+      FirebaseFirestore.instance.collection('queues');
   final TextEditingController _statusController = TextEditingController();
 
   void _updateData(String newValue, [DocumentSnapshot? documentSnapshot]) {
-    _transaction.doc(documentSnapshot!.id).update({'status': newValue});
+    _queues.doc(documentSnapshot!.id).update({'status': newValue});
+  }
+
+  void _removeFromQueue(String id) {
+    FirebaseFirestore.instance.collection('queues').doc(id).delete();
   }
 
   Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
@@ -43,7 +47,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Status Obat",
+                "Status Antrean",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -57,13 +61,13 @@ class _TransactionRecapState extends State<TransactionRecap> {
                   ElevatedButton(
                     onPressed: () {
                       _updateData(
-                        'Siapkan Obat',
+                        'Menunggu',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Siapkan Obat',
+                      'Menunggu',
                       style: TextStyle(
                         color: Colors.red,
                       ),
@@ -75,13 +79,13 @@ class _TransactionRecapState extends State<TransactionRecap> {
                   ElevatedButton(
                     onPressed: () {
                       _updateData(
-                        'Obat Siap',
+                        'Sudah Dilayani',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Obat Siap',
+                      'Sudah Dilayani',
                       style: TextStyle(
                         color: Colors.green,
                       ),
@@ -101,7 +105,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Update Antrian",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -113,7 +117,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: _queues.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -128,31 +132,14 @@ class _TransactionRecapState extends State<TransactionRecap> {
                 return Column(
                   children: [
                     Card(
-                      margin: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(5),
                       child: ListTile(
-                        title: Row(
-                          children: [
-                            const Text(
-                              "Rekap Pembayaran",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 160,
-                            ),
-                            Row(
-                              children: [
-                                // Press this button to edit a single product
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () =>
-                                      updateStatus(documentSnapshot),
-                                ),
-                              ],
-                            ),
-                          ],
+                        title: const Text(
+                          "Update Antrian",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -168,62 +155,42 @@ class _TransactionRecapState extends State<TransactionRecap> {
                             ),
                             Row(
                               children: [
-                                const Text("Alamat: "),
+                                const Text("Keperluan: "),
                                 Text(
-                                  documentSnapshot['address'].toString(),
+                                  documentSnapshot['keperluan'].toString(),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                const Text("Nomor Handphone: "),
-                                Text(
-                                  documentSnapshot['phone'].toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Total Pembelian: "),
-                                Text(
-                                  documentSnapshot['price'].toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Metode Pembelian: "),
-                                Text(
-                                  documentSnapshot['purchase_method']
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Waktu Pembelian: "),
-                                Text(
-                                  formattedDate.toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Validasi Pembayaran: "),
-                                Text(
-                                  documentSnapshot['valid'].toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Status: "),
+                                const Text("Status Antrian: "),
                                 Text(
                                   documentSnapshot['status'].toString(),
                                 ),
                               ],
                             ),
+                            const Text("Waktu Input Antrian: "),
+                            Text(
+                              formattedDate.toString(),
+                            ),
                           ],
+                        ),
+                        trailing: SizedBox(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              // Press this button to edit a single product
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => updateStatus(documentSnapshot),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () =>
+                                    _removeFromQueue(documentSnapshot.id),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

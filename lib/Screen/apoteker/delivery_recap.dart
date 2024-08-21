@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const DeliveryRecap());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class DeliveryRecap extends StatefulWidget {
+  const DeliveryRecap({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<DeliveryRecap> createState() => _DeliveryRecapState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
+class _DeliveryRecapState extends State<DeliveryRecap> {
+  final CollectionReference _delivery =
+      FirebaseFirestore.instance.collection('delivery');
   final TextEditingController _statusController = TextEditingController();
 
-  void _updateData(String newValue, [DocumentSnapshot? documentSnapshot]) {
-    _transaction.doc(documentSnapshot!.id).update({'status': newValue});
+  void _updateStatus(String newValue, [DocumentSnapshot? documentSnapshot]) {
+    _delivery.doc(documentSnapshot!.id).update({'status': newValue});
   }
 
   Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
@@ -56,16 +56,16 @@ class _TransactionRecapState extends State<TransactionRecap> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      _updateData(
-                        'Siapkan Obat',
+                      _updateStatus(
+                        'Obat Siap',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Siapkan Obat',
+                      'Obat Siap',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.yellow,
                       ),
                     ),
                   ),
@@ -74,14 +74,14 @@ class _TransactionRecapState extends State<TransactionRecap> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _updateData(
-                        'Obat Siap',
+                      _updateStatus(
+                        'Obat Diterima',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Obat Siap',
+                      'Obat Diterima',
                       style: TextStyle(
                         color: Colors.green,
                       ),
@@ -101,7 +101,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Rekap Pengantaran",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: _delivery.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -133,14 +133,14 @@ class _TransactionRecapState extends State<TransactionRecap> {
                         title: Row(
                           children: [
                             const Text(
-                              "Rekap Pembayaran",
+                              "Rekap Pengantaran",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(
-                              width: 160,
+                              width: 140,
                             ),
                             Row(
                               children: [

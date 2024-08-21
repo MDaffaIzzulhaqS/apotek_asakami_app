@@ -3,23 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const TransactionRecap());
+  runApp(const CourierDeliveryOrder());
 }
 
-class TransactionRecap extends StatefulWidget {
-  const TransactionRecap({super.key});
+class CourierDeliveryOrder extends StatefulWidget {
+  const CourierDeliveryOrder({super.key});
 
   @override
-  State<TransactionRecap> createState() => _TransactionRecapState();
+  State<CourierDeliveryOrder> createState() => _CourierDeliveryOrderState();
 }
 
-class _TransactionRecapState extends State<TransactionRecap> {
-  final CollectionReference _transaction =
-      FirebaseFirestore.instance.collection('transaction');
+class _CourierDeliveryOrderState extends State<CourierDeliveryOrder> {
+  final CollectionReference _delivery =
+      FirebaseFirestore.instance.collection('delivery');
+  final TextEditingController _validationController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
 
-  void _updateData(String newValue, [DocumentSnapshot? documentSnapshot]) {
-    _transaction.doc(documentSnapshot!.id).update({'status': newValue});
+  void _updateStatus(String newValue, [DocumentSnapshot? documentSnapshot]) {
+    _delivery.doc(documentSnapshot!.id).update({'status': newValue});
   }
 
   Future<void> updateStatus([DocumentSnapshot? documentSnapshot]) async {
@@ -43,7 +44,85 @@ class _TransactionRecapState extends State<TransactionRecap> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Status Obat",
+                "Status Pembayaran",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _updateStatus(
+                        'Obat Siap',
+                        documentSnapshot,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Obat Siap',
+                      style: TextStyle(
+                        color: Colors.yellow,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _updateStatus(
+                        'Obat Dikirim',
+                        documentSnapshot,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Obat Dikirim',
+                      style: TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _updateData(String newValue, [DocumentSnapshot? documentSnapshot]) {
+    _delivery.doc(documentSnapshot!.id).update({'valid': newValue});
+  }
+
+  Future<void> updateValidation([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _validationController.text = documentSnapshot['valid'];
+    }
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            // prevent the soft keyboard from covering text fields
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Validasi Pembayaran",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -57,13 +136,13 @@ class _TransactionRecapState extends State<TransactionRecap> {
                   ElevatedButton(
                     onPressed: () {
                       _updateData(
-                        'Siapkan Obat',
+                        'Belum Valid',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Siapkan Obat',
+                      'Belum Valid',
                       style: TextStyle(
                         color: Colors.red,
                       ),
@@ -75,13 +154,13 @@ class _TransactionRecapState extends State<TransactionRecap> {
                   ElevatedButton(
                     onPressed: () {
                       _updateData(
-                        'Obat Siap',
+                        'Sudah Valid',
                         documentSnapshot,
                       );
                       Navigator.of(context).pop();
                     },
                     child: const Text(
-                      'Obat Siap',
+                      'Sudah Valid',
                       style: TextStyle(
                         color: Colors.green,
                       ),
@@ -101,7 +180,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Pembayaran",
+          "Rekap Pengantaran",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -113,7 +192,7 @@ class _TransactionRecapState extends State<TransactionRecap> {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: _transaction.snapshots(),
+        stream: _delivery.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
@@ -133,20 +212,25 @@ class _TransactionRecapState extends State<TransactionRecap> {
                         title: Row(
                           children: [
                             const Text(
-                              "Rekap Pembayaran",
+                              "Rekap Pengantaran",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(
-                              width: 160,
+                              width: 90,
                             ),
                             Row(
                               children: [
                                 // Press this button to edit a single product
                                 IconButton(
                                   icon: const Icon(Icons.edit),
+                                  onPressed: () =>
+                                      updateValidation(documentSnapshot),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.update_rounded),
                                   onPressed: () =>
                                       updateStatus(documentSnapshot),
                                 ),

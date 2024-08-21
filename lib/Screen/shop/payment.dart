@@ -1,4 +1,5 @@
-import 'package:apotek_asakami_app/Screen/shop/purchase.dart';
+import 'package:apotek_asakami_app/Screen/profile/user_delivery_recap.dart';
+import 'package:apotek_asakami_app/Screen/shop/confirm_transaction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,123 +15,10 @@ class Payment extends StatefulWidget {
 class PaymentState extends State<Payment> {
   final CollectionReference _transaction =
       FirebaseFirestore.instance.collection('transaction');
+  final CollectionReference _delivery =
+      FirebaseFirestore.instance.collection('delivery');
   final CollectionReference _checkouts =
       FirebaseFirestore.instance.collection('checkouts');
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _purchaseMethodController =
-      TextEditingController();
-
-  Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
-    if (documentSnapshot != null) {
-      _nameController.text = documentSnapshot['name'];
-      _addressController.text = documentSnapshot['address'];
-      _phoneNumberController.text = documentSnapshot['phoneNumber'];
-      _priceController.text = documentSnapshot['price'];
-    }
-    await showDialog(
-      context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          title: const Center(child: Text("Konfirmasi Pembayaran")),
-          insetPadding: EdgeInsets.zero,
-          content: SizedBox(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 430),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nama',
-                    ),
-                  ),
-                  TextField(
-                    controller: _addressController,
-                    decoration: const InputDecoration(
-                      labelText: 'Alamat',
-                    ),
-                  ),
-                  TextField(
-                    controller: _phoneNumberController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nomor HP',
-                    ),
-                  ),
-                  TextField(
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    controller: _priceController,
-                    decoration: const InputDecoration(
-                      labelText: 'Harga',
-                    ),
-                  ),
-                  TextField(
-                    controller: _purchaseMethodController,
-                    decoration: const InputDecoration(
-                      labelText: 'Metode Pembelian',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      child: const Text('Bayar'),
-                      onPressed: () async {
-                        User? user = FirebaseAuth.instance.currentUser;
-                        final String name = _nameController.text;
-                        final String address = _addressController.text;
-                        final String phone = _phoneNumberController.text;
-                        final double? price =
-                            double.tryParse(_priceController.text);
-                        final String purchaseMethod =
-                            _purchaseMethodController.text;
-                        const String status = "Belum Bayar";
-                        if (price != null && user != null) {
-                          // Persist a new product to Firestore
-                          await _transaction.add({
-                            'uid': user.uid,
-                            "name": name,
-                            "address": address,
-                            "phone": phone,
-                            "price": price,
-                            "purchase_method": purchaseMethod,
-                            "status": status,
-                            "timestamp": FieldValue.serverTimestamp()
-                          });
-                          // Clear the text fields
-                          _nameController.text = '';
-                          _addressController.text = '';
-                          _phoneNumberController.text = '';
-                          _priceController.text = '';
-                          _purchaseMethodController.text = '';
-                          // Hide the bottom sheet
-                          Future.delayed(const Duration(seconds: 1), () {
-                            Navigator.of(context).pop();
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const Purchase(),
-                              withNavBar: true,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   Future<String?> getCurrentUserId() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -139,7 +27,7 @@ class PaymentState extends State<Payment> {
 
   Future<double> getTotalAmount() async {
     String? userId = await getCurrentUserId();
-    double totalPembelian = 0.0;
+    double totalPembelian = 0;
 
     QuerySnapshot querySnapshot =
         await _checkouts.where('uid', isEqualTo: userId).get();
@@ -421,8 +309,49 @@ class PaymentState extends State<Payment> {
                       ),
                       if (_type == 2)
                         InkWell(
-                          onTap: () {
-                            _transactionItem();
+                          onTap: () async {
+                            User? user = FirebaseAuth.instance.currentUser;
+                            final double price = totalPembelian + biayaOngkir;
+                            const String purchaseMethod = "Cash On Delivery";
+                            const String validation = "Belum Valid";
+                            const String status = "Belum Siap";
+                            if (user != null) {
+                              // Persist a new product to Firestore
+                              await _transaction.add({
+                                'uid': user.uid,
+                                'name': "User 01",
+                                'address': "Purwokerto",
+                                'phone': "081227086943",
+                                "price": price,
+                                "purchase_method": purchaseMethod,
+                                "valid": validation,
+                                "imageUrl": "-",
+                                "status": status,
+                                "timestamp": FieldValue.serverTimestamp()
+                              });
+                              await _delivery.add({
+                                'uid': user.uid,
+                                'name': "User 01",
+                                'address': "Purwokerto",
+                                'phone': "081227086943",
+                                "price": price,
+                                "purchase_method": purchaseMethod,
+                                "valid": validation,
+                                "imageUrl": "-",
+                                "status": status,
+                                "timestamp": FieldValue.serverTimestamp()
+                              });
+                              Future.delayed(const Duration(seconds: 3), () {
+                                Navigator.of(context).pop();
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: const UserDeliveryRecap(),
+                                  withNavBar: true,
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                );
+                              });
+                            }
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
@@ -452,7 +381,13 @@ class PaymentState extends State<Payment> {
                       else
                         InkWell(
                           onTap: () {
-                            // _transactionItem();
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const ConfirmTransaction(),
+                              withNavBar: true,
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
+                            );
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(

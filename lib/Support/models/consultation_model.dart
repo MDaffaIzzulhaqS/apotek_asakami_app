@@ -38,20 +38,11 @@ final List<Doctor> doctors = [
   Doctor(
     name: 'Dr. Rini Puspitasari',
     imageUrl: 'assets/images/default_profile.png',
-    specialty: 'Spesialis Bedah',
+    specialty: 'Spesialis THT',
     schedule: 'Senin, Sabtu: 11:00 - 14:00',
     phoneNumber: '+6281227086943',
     description:
-        'Dr. Rini Puspitasari adalah dokter spesialis bedah dengan keahlian konsultasi seputar gigi.',
-  ),
-  Doctor(
-    name: 'Dr. Taryanto',
-    imageUrl: 'assets/images/default_profile.png',
-    specialty: 'Spesialis Bedah',
-    schedule: 'Selasa, Sabtu: 09:00 - 14:00',
-    phoneNumber: '+6281227086943',
-    description:
-        'Dr. Taryanto adalah dokter spesialis bedah dengan keahlian konsultasi seputar tht.',
+        'Dr. Rini Puspitasari adalah dokter spesialis THT dengan keahlian konsultasi seputar gigi.',
   ),
   Doctor(
     name: 'Dr. Yutskhina Musaarah',

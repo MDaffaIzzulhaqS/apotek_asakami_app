@@ -1,5 +1,6 @@
 import 'package:apotek_asakami_app/Screen/profile/complaint.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_checkout_recap.dart';
+import 'package:apotek_asakami_app/Screen/profile/user_delivery_recap.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_homecare_recap.dart';
 import 'package:apotek_asakami_app/Screen/profile/user_payment_recap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -121,11 +122,20 @@ class _ProfileState extends State<Profile> {
                     const SizedBox(
                       height: 30,
                     ),
-                    const CircleAvatar(
-                      radius: 70,
-                      backgroundImage: AssetImage(
-                        'assets/images/default_profile.png',
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 70,
+                          backgroundImage: AssetImage(
+                            'assets/images/default_profile.png',
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _updateProfile(snapshot.data),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -172,32 +182,7 @@ class _ProfileState extends State<Profile> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               foregroundColor: Colors.white,
-                              backgroundColor: Colors.deepPurple[400],
-                              minimumSize: const Size.fromHeight(40),
-                            ),
-                            onPressed: () {
-                              _updateProfile(snapshot.data);
-                            },
-                            child: const Text(
-                              'Ubah Profil',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.pink,
+                              backgroundColor: Colors.pinkAccent,
                               minimumSize: const Size.fromHeight(40),
                             ),
                             onPressed: () {
@@ -259,7 +244,38 @@ class _ProfileState extends State<Profile> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               foregroundColor: Colors.white,
-                              backgroundColor: Colors.pink,
+                              backgroundColor: Colors.purple,
+                              minimumSize: const Size.fromHeight(40),
+                            ),
+                            onPressed: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const UserDeliveryRecap(),
+                                withNavBar: true,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Text(
+                              'Riwayat Pengantaran',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.deepPurple,
                               minimumSize: const Size.fromHeight(40),
                             ),
                             onPressed: () {

@@ -40,97 +40,6 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
       FirebaseFirestore.instance.collection('products');
   final CollectionReference _checkouts =
       FirebaseFirestore.instance.collection('checkouts');
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-
-  Future<void> _transactionItem([DocumentSnapshot? documentSnapshot]) async {
-    if (documentSnapshot != null) {
-      _nameController.text = documentSnapshot['name'];
-      _quantityController.text = documentSnapshot['quantity'];
-      _priceController.text = documentSnapshot['price'];
-    }
-    await showDialog(
-      context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          title: const Center(child: Text("Konfirmasi Pembelian")),
-          content: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 300),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nama Barang',
-                    ),
-                  ),
-                  TextField(
-                    controller: _quantityController,
-                    decoration: const InputDecoration(
-                      labelText: 'Jumlah Barang',
-                    ),
-                  ),
-                  TextField(
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    controller: _priceController,
-                    decoration: const InputDecoration(
-                      labelText: 'Harga Barang',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      child: const Text('Beli Barang'),
-                      onPressed: () async {
-                        User? user = FirebaseAuth.instance.currentUser;
-                        final String name = _nameController.text;
-                        final String quantity = _quantityController.text;
-                        final double? price =
-                            double.tryParse(_priceController.text);
-                        if (price != null && user != null) {
-                          // Persist a new product to Firestore
-                          await _checkouts.add({
-                            'uid': user.uid,
-                            "name": name,
-                            "totalQuantity": quantity,
-                            "totalPrice": price,
-                            'timestamp': FieldValue.serverTimestamp(),
-                          });
-                          // Clear the text fields
-                          _nameController.text = '';
-                          _quantityController.text = '';
-                          _priceController.text = '';
-                          // Hide the bottom sheet
-                          Future.delayed(
-                            const Duration(seconds: 1),
-                            () {
-                              Navigator.of(context).pop();
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: const Checkout(),
-                                withNavBar: true,
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
-                              );
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -406,8 +315,35 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                                   color: Colors.purpleAccent,
                                   borderRadius: BorderRadius.circular(10),
                                   child: InkWell(
-                                    onTap: () {
-                                      _transactionItem(product);
+                                    onTap: () async {
+                                      User? user =
+                                          FirebaseAuth.instance.currentUser;
+                                      final String name = product?['name'];
+                                      final String quantity =
+                                          _counter.toString();
+                                      final double price = totalHarga;
+                                      if (user != null) {
+                                        // Persist a new product to Firestore
+                                        await _checkouts.add(
+                                          {
+                                            'uid': user.uid,
+                                            "name": name,
+                                            "totalQuantity": quantity,
+                                            "totalPrice": price,
+                                            'timestamp':
+                                                FieldValue.serverTimestamp(),
+                                          },
+                                        );
+                                        // Hide the bottom sheet
+                                        Navigator.of(context).pop();
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: const Checkout(),
+                                          withNavBar: true,
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation.cupertino,
+                                        );
+                                      }
                                     },
                                     borderRadius: BorderRadius.circular(10),
                                     child: Container(

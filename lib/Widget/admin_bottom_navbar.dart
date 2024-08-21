@@ -1,7 +1,8 @@
 import 'package:apotek_asakami_app/Screen/admin/checkout_rekap.dart';
+import 'package:apotek_asakami_app/Screen/admin/delivery_recap.dart';
 import 'package:apotek_asakami_app/Screen/admin/product_data.dart';
 import 'package:apotek_asakami_app/Screen/admin/transaction_recap.dart';
-import 'package:apotek_asakami_app/Screen/admin/user_data.dart';
+import 'package:apotek_asakami_app/Screen/admin/update_queue.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -15,9 +16,10 @@ class AdminBottomNavBar extends StatelessWidget {
     List<Widget> buildScreens() {
       return [
         const ProductData(),
+        const UpdateQueue(),
         const TransactionRecap(),
         const CheckoutRecap(),
-        const UserData(),
+        const AdminDeliveryRecap(),
       ];
     }
 
@@ -26,6 +28,12 @@ class AdminBottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.home_rounded),
           title: ("Data Obat"),
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.list_alt_rounded),
+          title: ("Update Antrean"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),
@@ -42,8 +50,8 @@ class AdminBottomNavBar extends StatelessWidget {
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.person_rounded),
-          title: ("Data Pengguna"),
+          icon: const Icon(Icons.list_alt_rounded),
+          title: ("Rekap Pengantaran"),
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.grey,
         ),

@@ -19,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
         const Service(),
         const Purchase(),
         const HealthChecking(),
-        Profile(),
+        const Profile(),
       ];
     }
 
