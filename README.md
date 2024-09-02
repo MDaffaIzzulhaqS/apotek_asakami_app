@@ -1,6 +1,6 @@
 # Apotek Asakami App
 
-Project Skripsi Apotek Asakami Dengan Framework Flutter Berbasis Android
+Prototype Project Skripsi Apotek Asakami Dengan Framework Flutter Berbasis Android
 
 ## Getting Started
 
